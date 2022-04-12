@@ -19,7 +19,8 @@ namespace SkiaImageView
     {
         Original,
         AspectFit,
-        // TODO:
+        // TODO: AspectFill,
+        // TODO: ScaleToFill,
     }
 
     public sealed class SKImageView : FrameworkElement
@@ -34,9 +35,24 @@ namespace SkiaImageView
             DependencyProperty.Register(
                 nameof(Fitting), typeof(ImageFittings), typeof(SKImageView),
                 new PropertyMetadata(
-                    null, (s, e) => ((SKImageView)s).InvalidateVisual()));
+                    ImageFittings.AspectFit, (s, e) => ((SKImageView)s).InvalidateVisual()));
+
+        public static readonly DependencyProperty HorizontalContentAlignmentProperty =
+            DependencyProperty.Register(
+                nameof(HorizontalContentAlignment), typeof(HorizontalAlignment), typeof(SKImageView),
+                new PropertyMetadata(
+                    HorizontalAlignment.Center, (s, e) => ((SKImageView)s).InvalidateVisual()));
+
+        public static readonly DependencyProperty VerticalContentAlignmentProperty =
+            DependencyProperty.Register(
+                nameof(VerticalContentAlignment), typeof(VerticalAlignment), typeof(SKImageView),
+                new PropertyMetadata(
+                    VerticalAlignment.Center, (s, e) => ((SKImageView)s).InvalidateVisual()));
 
         private WriteableBitmap? backingStore;
+
+        public SKImageView() =>
+            this.Fitting = ImageFittings.AspectFit;
 
         public object Image
         {
@@ -48,6 +64,18 @@ namespace SkiaImageView
         {
             get => (ImageFittings)this.GetValue(FittingProperty);
             set => this.SetValue(FittingProperty, value);
+        }
+
+        public HorizontalAlignment HorizontalContentAlignment
+        {
+            get => (HorizontalAlignment)this.GetValue(HorizontalContentAlignmentProperty);
+            set => this.SetValue(HorizontalContentAlignmentProperty, value);
+        }
+
+        public VerticalAlignment VerticalContentAlignment
+        {
+            get => (VerticalAlignment)this.GetValue(VerticalContentAlignmentProperty);
+            set => this.SetValue(VerticalContentAlignmentProperty, value);
         }
 
         private void OnBitmapChanged(DependencyPropertyChangedEventArgs e)

@@ -14,7 +14,23 @@
 
 Easy way showing SkiaSharp-based image objects onto WPF applications.
 
-TODO:
+The `Image` property accepts the following types of objects:
+
+* `SKBitmap`
+* `SKImage`
+* `SKDrawable`
+  * The `SKDrawable` is drawn with the size corresponding to the current `RenderSize` area.
+
+XAML example:
+
+```xml
+<Window
+    xmlns:siv="clr-namespace:SkiaImageView;assembly=SkiaImageView.Wpf">
+    <siv:SKImageView
+        Visibility="{Binding PreviewImageVisibility}"
+        Image="{Binding PreviewImage}" />
+</Window>
+```
 
 ----
 
