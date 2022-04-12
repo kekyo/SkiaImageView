@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkiaImageView.Wpf", "SkiaImageView.Wpf\SkiaImageView.Wpf.csproj", "{157481F4-29F3-446A-A1D5-BB7C12C81B2E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{836A17CD-E5EB-4E4B-99C4-6D6CEEE670BC}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		build-nupkg.bat = build-nupkg.bat
+		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{157481F4-29F3-446A-A1D5-BB7C12C81B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{157481F4-29F3-446A-A1D5-BB7C12C81B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{157481F4-29F3-446A-A1D5-BB7C12C81B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{157481F4-29F3-446A-A1D5-BB7C12C81B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {58C0DB65-ABA3-4F91-A1BF-33F60C70CCB4}
+	EndGlobalSection
+EndGlobal
