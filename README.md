@@ -14,7 +14,20 @@
 
 Easy way showing SkiaSharp-based image objects onto WPF applications.
 
-The `Image` property accepts the following types of objects:
+`SKImageView` is a control of SkiaSharp image drawing.
+You can manipulate same as with WPF's `Image` control.
+
+Available properties:
+
+|Name|Detail|
+|:----|:----|
+|`Source`|SkiaSharp image related objects. See listed below.|
+|`Stretch`|[Stretch enum value](https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.stretch?view=windowsdesktop-6.0), TODO: currently `None` and `Uniform` are accepted. |
+|`StretchDirection`|TODO: [StretchDirection enum value](https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.stretchdirection?view=windowsdesktop-6.0)|
+|`HorizontalContentAlignment`|TODO: `HorizontalAlignment`|
+|`VerticalContentAlignment`|TODO: `VerticalAlignment`|
+
+The `Source` property accepts the following types of objects:
 
 * `SKBitmap`
 * `SKImage`
@@ -26,8 +39,8 @@ XAML example:
 ```xml
 <Window xmlns:siv="https://github.com/kekyo/SkiaImageView.Wpf">
     <siv:SKImageView
-        Fitting="AspectFit"
-        Image="{Binding PreviewImage}" />
+        Stretch="Uniform"
+        Source="{Binding PreviewImage}" />
 </Window>
 ```
 

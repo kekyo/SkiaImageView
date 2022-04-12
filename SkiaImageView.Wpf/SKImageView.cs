@@ -15,27 +15,19 @@ using System.Windows.Media.Imaging;
 
 namespace SkiaImageView
 {
-    public enum ImageFittings
-    {
-        Original,
-        AspectFit,
-        // TODO: AspectFill,
-        // TODO: ScaleToFill,
-    }
-
     public sealed class SKImageView : FrameworkElement
     {
-        public static readonly DependencyProperty ImageProperty =
+        public static readonly DependencyProperty SourceProperty =
             DependencyProperty.Register(
-                nameof(Image), typeof(object), typeof(SKImageView),
+                nameof(Source), typeof(object), typeof(SKImageView),
                 new PropertyMetadata(
                     null, (s, e) => ((SKImageView)s).OnBitmapChanged(e)));
 
-        public static readonly DependencyProperty FittingProperty =
+        public static readonly DependencyProperty StretchProperty =
             DependencyProperty.Register(
-                nameof(Fitting), typeof(ImageFittings), typeof(SKImageView),
+                nameof(Stretch), typeof(Stretch), typeof(SKImageView),
                 new PropertyMetadata(
-                    ImageFittings.AspectFit, (s, e) => ((SKImageView)s).InvalidateVisual()));
+                    Stretch.Uniform, (s, e) => ((SKImageView)s).InvalidateVisual()));
 
         public static readonly DependencyProperty HorizontalContentAlignmentProperty =
             DependencyProperty.Register(
@@ -52,18 +44,18 @@ namespace SkiaImageView
         private WriteableBitmap? backingStore;
 
         public SKImageView() =>
-            this.Fitting = ImageFittings.AspectFit;
+            this.Stretch = Stretch.Uniform;
 
-        public object Image
+        public object Source
         {
-            get => this.GetValue(ImageProperty);
-            set => this.SetValue(ImageProperty, value);
+            get => this.GetValue(SourceProperty);
+            set => this.SetValue(SourceProperty, value);
         }
 
-        public ImageFittings Fitting
+        public Stretch Stretch
         {
-            get => (ImageFittings)this.GetValue(FittingProperty);
-            set => this.SetValue(FittingProperty, value);
+            get => (Stretch)this.GetValue(StretchProperty);
+            set => this.SetValue(StretchProperty, value);
         }
 
         public HorizontalAlignment HorizontalContentAlignment
@@ -80,7 +72,7 @@ namespace SkiaImageView
 
         private void OnBitmapChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (this.Image is SKBitmap bitmap)
+            if (this.Source is SKBitmap bitmap)
             {
                 var info = new SKImageInfo(
                     bitmap.Width, bitmap.Height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
@@ -95,7 +87,7 @@ namespace SkiaImageView
 
                 this.backingStore = backingStore;
             }
-            else if (this.Image is SKImage image)
+            else if (this.Source is SKImage image)
             {
                 var info = new SKImageInfo(
                     image.Width, image.Height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
@@ -110,7 +102,7 @@ namespace SkiaImageView
 
                 this.backingStore = backingStore;
             }
-            else if (this.Image is SKDrawable drawable)
+            else if (this.Source is SKDrawable drawable)
             {
                 var info = new SKImageInfo(
                     (int)base.RenderSize.Width, (int)base.RenderSize.Height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
@@ -142,9 +134,9 @@ namespace SkiaImageView
                 if (backingStore.Width > 0 && backingStore.Height > 0 &&
                     base.RenderSize.Width > 0 && base.RenderSize.Height > 0)
                 {
-                    switch (this.Fitting)
+                    switch (this.Stretch)
                     {
-                        case ImageFittings.AspectFit:
+                        case Stretch.Uniform:
                             Rect rect;
                             if (((double)base.RenderSize.Width / base.RenderSize.Height) >
                                 ((double)backingStore.Width / backingStore.Height))
