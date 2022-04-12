@@ -10,5 +10,5 @@
 
 using System.Windows.Markup;
 
-[assembly: XmlnsDefinition("https://github.com/kekyo/SkiaImageView", "SkiaImageView")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/SkiaImageView", "siv")] 
+[assembly: XmlnsDefinition("https://github.com/kekyo/SkiaImageView.Wpf", "SkiaImageView")]
+[assembly: XmlnsPrefix("https://github.com/kekyo/SkiaImageView.Wpf", "siv")] 

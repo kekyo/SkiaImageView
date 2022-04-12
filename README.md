@@ -24,10 +24,9 @@ The `Image` property accepts the following types of objects:
 XAML example:
 
 ```xml
-<Window
-    xmlns:siv="clr-namespace:SkiaImageView;assembly=SkiaImageView.Wpf">
+<Window xmlns:siv="https://github.com/kekyo/SkiaImageView.Wpf">
     <siv:SKImageView
-        Visibility="{Binding PreviewImageVisibility}"
+        Fitting="AspectFit"
         Image="{Binding PreviewImage}" />
 </Window>
 ```
