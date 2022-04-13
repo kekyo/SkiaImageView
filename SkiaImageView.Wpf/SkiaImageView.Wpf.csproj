@@ -10,4 +10,8 @@
     <PackageReference Include="SkiaSharp" Version="2.80.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\Images\SkiaImageView.Wpf.100.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
 </Project>

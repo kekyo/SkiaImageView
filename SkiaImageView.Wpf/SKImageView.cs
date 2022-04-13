@@ -133,6 +133,12 @@ namespace SkiaImageView
                 {
                     switch (this.Stretch)
                     {
+                        case Stretch.Fill:
+                            drawingContext.DrawImage(
+                                backingStore,
+                                new Rect(0, 0, base.RenderSize.Width, base.RenderSize.Height));
+                            break;
+
                         case Stretch.Uniform:
                             Rect rect;
                             if (((double)base.RenderSize.Width / base.RenderSize.Height) >

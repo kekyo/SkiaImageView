@@ -28,7 +28,7 @@
     <Authors>Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/kekyo/SkiaImageView.Wpf</PackageProjectUrl>
-    <!--<PackageIcon>SkiaImageView.Wpf.100.png</PackageIcon>-->
+    <PackageIcon>SkiaImageView.Wpf.100.png</PackageIcon>
     <PackageTags>skiasharp;wpf;imaging</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <NoWarn>$(NoWarn);NU1605;NU1701</NoWarn>
