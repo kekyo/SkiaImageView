@@ -2,7 +2,7 @@
 
 ![SkiaImageView.Wpf](Images/SkiaImageView.Wpf.100.png)
 
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
 ## NuGet
 
@@ -57,20 +57,22 @@ Fully sample code is here: [SkiaImageView.Wpf.Sample](https://github.com/kekyo/S
 
 The `Source` property accepts the following SkiaSharp types:
 
-|Supported Type|Aspect ratio from|
-|:----|:----|
-|`SKBitmap`|Origin|
-|`SKImage`|Origin|
-|`SKPicture`|Measured `RenderSize`|
-|`SKDrawable`|Measured `RenderSize`|
-|`SKSurface`|Measured `RenderSize`|
-|`string`|Origin|
-|`Uri`|Origin|
+|Supported Type|Aspect ratio from|Note|
+|:----|:----|:----|
+|`SKBitmap`|Origin| |
+|`SKImage`|Origin| |
+|`SKPicture`|Measured `RenderSize`| |
+|`SKDrawable`|Measured `RenderSize`| |
+|`SKSurface`|Measured `RenderSize`| |
+|`string`|Origin|URL string for downloading content|
+|`Uri`|Origin|URL for downloading content|
 
 Some types are drawn with aspect ratio corresponding to the current measured `RenderSize` area.
 Therefore, to maintain the aspect ratio, the size must be explicitly controlled in XAML.
 
 ### RenderMode property
+
+Choose rendering into back buffer by synchronous or asynchronous:
 
 |RenderMode|Note|
 |:----|:----|
