@@ -31,6 +31,8 @@ XAML example:
 </Window>
 ```
 
+Fully sample code is here: [SkiaImageView.Wpf.Sample](https://github.com/kekyo/SkiaImageView.Wpf/tree/main/samples/SkiaImageView.Wpf.Sample)
+
 ----
 
 ## Supported platform
@@ -76,7 +78,8 @@ Apache-v2.
 ## History
 
 * 0.4.0:
-  * 
+  * Added RenderMode features and supported StretchDirection.
+  * Added sample code.
 * 0.3.0:
   * Fixed XAML namespace.
 * 0.2.0:
