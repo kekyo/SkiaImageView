@@ -57,15 +57,15 @@ Fully sample code is here: [SkiaImageView.Wpf.Sample](https://github.com/kekyo/S
 
 The `Source` property accepts the following SkiaSharp types:
 
-|Supported Type|Aspect ratio from|Note|
-|:----|:----|:----|
-|`SKBitmap`|Origin||
-|`SKImage`|Origin||
-|`SKPicture`|Measured `RenderSize`||
-|`SKDrawable`|Measured `RenderSize`||
-|`SKSurface`|Measured `RenderSize`||
-|`string`|Origin|Asynchronous loads from URL string|
-|`Uri`|Origin|Asynchronous loads from URL|
+|Supported Type|Aspect ratio from|
+|:----|:----|
+|`SKBitmap`|Origin|
+|`SKImage`|Origin|
+|`SKPicture`|Measured `RenderSize`|
+|`SKDrawable`|Measured `RenderSize`|
+|`SKSurface`|Measured `RenderSize`|
+|`string`|Origin|
+|`Uri`|Origin|
 
 Some types are drawn with aspect ratio corresponding to the current measured `RenderSize` area.
 Therefore, to maintain the aspect ratio, the size must be explicitly controlled in XAML.
