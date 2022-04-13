@@ -123,6 +123,7 @@ namespace SkiaImageView
                     {
                         this.backingStore = backingStore;
                         this.InvalidateMeasure();
+                        this.InvalidateVisual();
                     }
                 }, DispatcherPriority.ApplicationIdle);
             }
@@ -147,6 +148,7 @@ namespace SkiaImageView
                     {
                         this.backingStore = backingStore;
                         this.InvalidateMeasure();
+                        this.InvalidateVisual();
                     }
                 }, DispatcherPriority.Normal);   // Higher priority
             }
@@ -168,6 +170,7 @@ namespace SkiaImageView
                         {
                             this.backingStore = backingStore;
                             this.InvalidateMeasure();
+                            this.InvalidateVisual();
                         }
                     });
                 }, DispatcherPriority.ApplicationIdle);
@@ -176,6 +179,7 @@ namespace SkiaImageView
             {
                 this.backingStore = DrawImage(width, height, action);
                 this.InvalidateMeasure();
+                this.InvalidateVisual();
             }
         }
 

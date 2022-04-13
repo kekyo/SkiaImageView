@@ -92,6 +92,9 @@ Apache-v2.
 
 ## History
 
+* 1.0.0:
+  * Reached 1.0.0 🎉
+  * Fixed updating new image instance.
 * 0.4.0:
   * Added RenderMode features and supported StretchDirection.
   * Added sample code.
