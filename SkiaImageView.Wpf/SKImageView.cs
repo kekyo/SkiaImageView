@@ -9,7 +9,10 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using SkiaSharp;
+using System;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -29,17 +32,11 @@ namespace SkiaImageView
                 new PropertyMetadata(
                     Stretch.Uniform, (s, e) => ((SKImageView)s).InvalidateVisual()));
 
-        public static readonly DependencyProperty HorizontalContentAlignmentProperty =
+        public static readonly DependencyProperty StretchDirectionProperty =
             DependencyProperty.Register(
-                nameof(HorizontalContentAlignment), typeof(HorizontalAlignment), typeof(SKImageView),
+                nameof(StretchDirection), typeof(StretchDirection), typeof(SKImageView),
                 new PropertyMetadata(
-                    HorizontalAlignment.Center, (s, e) => ((SKImageView)s).InvalidateVisual()));
-
-        public static readonly DependencyProperty VerticalContentAlignmentProperty =
-            DependencyProperty.Register(
-                nameof(VerticalContentAlignment), typeof(VerticalAlignment), typeof(SKImageView),
-                new PropertyMetadata(
-                    VerticalAlignment.Center, (s, e) => ((SKImageView)s).InvalidateVisual()));
+                    StretchDirection.Both, (s, e) => ((SKImageView)s).InvalidateVisual()));
 
         private WriteableBitmap? backingStore;
 
@@ -58,64 +55,64 @@ namespace SkiaImageView
             set => this.SetValue(StretchProperty, value);
         }
 
-        public HorizontalAlignment HorizontalContentAlignment
+        public StretchDirection StretchDirection
         {
-            get => (HorizontalAlignment)this.GetValue(HorizontalContentAlignmentProperty);
-            set => this.SetValue(HorizontalContentAlignmentProperty, value);
+            get => (StretchDirection)this.GetValue(StretchDirectionProperty);
+            set => this.SetValue(StretchDirectionProperty, value);
         }
 
-        public VerticalAlignment VerticalContentAlignment
+        private void DrawImage(int width, int height, Action<SKCanvas> action)
         {
-            get => (VerticalAlignment)this.GetValue(VerticalContentAlignmentProperty);
-            set => this.SetValue(VerticalContentAlignmentProperty, value);
+            var info = new SKImageInfo(
+                width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
+            var backingStore = new WriteableBitmap(
+                info.Width, info.Height, 96.0 * 1, 96.0 * 1, PixelFormats.Pbgra32, null);
+
+            using (var surface = SKSurface.Create(info, backingStore.BackBuffer, backingStore.BackBufferStride))
+            {
+                action(surface.Canvas);
+            }
+
+            backingStore.Freeze();
+            this.backingStore = backingStore;
         }
 
         private void OnBitmapChanged(DependencyPropertyChangedEventArgs e)
         {
             if (this.Source is SKBitmap bitmap)
             {
-                var info = new SKImageInfo(
-                    bitmap.Width, bitmap.Height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-                var backingStore = new WriteableBitmap(
-                    info.Width, info.Height, 96.0 * 1, 96.0 * 1, PixelFormats.Pbgra32, null);
-
-                using (var surface = SKSurface.Create(info, backingStore.BackBuffer, backingStore.BackBufferStride))
-                {
-                    surface.Canvas.DrawBitmap(bitmap, default(SKPoint));
-                }
-                backingStore.Freeze();
-
-                this.backingStore = backingStore;
+                this.DrawImage(
+                    bitmap.Width, bitmap.Height,
+                    canvas => canvas.DrawBitmap(bitmap, default(SKPoint)));
             }
             else if (this.Source is SKImage image)
             {
-                var info = new SKImageInfo(
-                    image.Width, image.Height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-                var backingStore = new WriteableBitmap(
-                    info.Width, info.Height, 96.0 * 1, 96.0 * 1, PixelFormats.Pbgra32, null);
-
-                using (var surface = SKSurface.Create(info, backingStore.BackBuffer, backingStore.BackBufferStride))
-                {
-                    surface.Canvas.DrawImage(image, default(SKPoint));
-                }
-                backingStore.Freeze();
-
-                this.backingStore = backingStore;
+                this.DrawImage(
+                    image.Width, image.Height,
+                    canvas => canvas.DrawImage(image, default(SKPoint)));
+            }
+            else if (this.Source is SKPicture picture)
+            {
+                this.DrawImage(
+                    (int)base.RenderSize.Width, (int)base.RenderSize.Height,
+                    canvas => canvas.DrawPicture(picture, default(SKPoint)));
             }
             else if (this.Source is SKDrawable drawable)
             {
-                var info = new SKImageInfo(
-                    (int)base.RenderSize.Width, (int)base.RenderSize.Height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-                var backingStore = new WriteableBitmap(
-                    info.Width, info.Height, 96.0 * 1, 96.0 * 1, PixelFormats.Pbgra32, null);
-
-                using (var surface = SKSurface.Create(info, backingStore.BackBuffer, backingStore.BackBufferStride))
-                {
-                    surface.Canvas.DrawDrawable(drawable, default(SKPoint));
-                }
-                backingStore.Freeze();
-
-                this.backingStore = backingStore;
+                this.DrawImage(
+                    (int)base.RenderSize.Width, (int)base.RenderSize.Height,
+                    canvas => canvas.DrawDrawable(drawable, default(SKPoint)));
+            }
+            else if (this.Source is SKSurface surface)
+            {
+                this.DrawImage(
+                    (int)base.RenderSize.Width, (int)base.RenderSize.Height,
+                    canvas => canvas.DrawSurface(surface, default(SKPoint)));
+            }
+            else if (this.Source != null)
+            {
+                Trace.WriteLine(
+                    $"SKImageView: Unknown image type, ignored.: {this.Source.GetType().FullName}");
             }
             else
             {

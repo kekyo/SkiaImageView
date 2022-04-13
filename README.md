@@ -24,15 +24,19 @@ Available properties:
 |`Source`|SkiaSharp image related objects. See listed below.|
 |`Stretch`|[Stretch enum value](https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.stretch?view=windowsdesktop-6.0), TODO: currently `None` and `Uniform` are accepted. |
 |`StretchDirection`|TODO: [StretchDirection enum value](https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.stretchdirection?view=windowsdesktop-6.0)|
-|`HorizontalContentAlignment`|TODO: `HorizontalAlignment`|
-|`VerticalContentAlignment`|TODO: `VerticalAlignment`|
 
 The `Source` property accepts the following types of objects:
 
-* `SKBitmap`
-* `SKImage`
-* `SKDrawable`
-  * The `SKDrawable` is drawn with the size corresponding to the current `RenderSize` area.
+|Type|Aspect ratio from|
+|:----|:----|
+|`SKBitmap`|Origin|
+|`SKImage`|Origin|
+|`SKPicture`|Measured `RenderSize`|
+|`SKDrawable`|Measured `RenderSize`|
+|`SKSurface`|Measured `RenderSize`|
+
+Some types are drawn with aspect ratio corresponding to the current measured `RenderSize` area.
+Therefore, to maintain the aspect ratio, the size must be explicitly controlled in XAML.
 
 XAML example:
 
