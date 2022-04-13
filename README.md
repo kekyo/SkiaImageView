@@ -19,6 +19,8 @@ Easy way showing [SkiaSharp](https://github.com/mono/SkiaSharp)-based image obje
 `SKImageView` is a control of SkiaSharp image drawing.
 You can manipulate same as with [WPF's `System.Windows.Controls.Image`](https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=windowsdesktop-6.0).
 
+Supported SkiaSharp types are: `SKBitmap`, `SKImage`, `SKPicture`, `SKDrawable` and `SKSurface`.
+
 XAML example:
 
 ```xml
@@ -50,7 +52,7 @@ XAML example:
 
 The `Source` property accepts the following SkiaSharp types:
 
-|Type|Aspect ratio from|
+|Supported Type|Aspect ratio from|
 |:----|:----|
 |`SKBitmap`|Origin|
 |`SKImage`|Origin|

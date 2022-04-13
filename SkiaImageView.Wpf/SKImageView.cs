@@ -68,12 +68,14 @@ namespace SkiaImageView
             var backingStore = new WriteableBitmap(
                 info.Width, info.Height, 96.0 * 1, 96.0 * 1, PixelFormats.Pbgra32, null);
 
+            backingStore.Lock();
             using (var surface = SKSurface.Create(info, backingStore.BackBuffer, backingStore.BackBufferStride))
             {
                 action(surface.Canvas);
             }
-
+            backingStore.Unlock();
             backingStore.Freeze();
+
             this.backingStore = backingStore;
         }
 
