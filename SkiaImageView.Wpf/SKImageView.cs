@@ -11,13 +11,23 @@
 using SkiaSharp;
 using System;
 using System.Diagnostics;
+using System.Net.Http;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace SkiaImageView
 {
+    public enum RenderMode
+    {
+        Synchronously,
+        AsynchronouslyForFetching,
+        Asynchronously,
+    }
+
     public sealed class SKImageView : FrameworkElement
     {
         public static readonly DependencyProperty SourceProperty =
@@ -38,10 +48,17 @@ namespace SkiaImageView
                 new PropertyMetadata(
                     StretchDirection.Both, (s, e) => ((SKImageView)s).InvalidateVisual()));
 
-        private WriteableBitmap? backingStore;
+        public static readonly DependencyProperty RenderModeProperty =
+            DependencyProperty.Register(
+                nameof(RenderMode), typeof(RenderMode), typeof(SKImageView),
+                new PropertyMetadata(
+                    RenderMode.AsynchronouslyForFetching, (s, e) => ((SKImageView)s).OnBitmapChanged(e)));
 
-        public SKImageView() =>
-            this.Stretch = Stretch.Uniform;
+        private static readonly Lazy<HttpClient> httpClient =
+            new Lazy<HttpClient>(() => new HttpClient());
+
+        private WriteableBitmap? backingStore;
+        private volatile int executionCount;
 
         public object Source
         {
@@ -61,12 +78,18 @@ namespace SkiaImageView
             set => this.SetValue(StretchDirectionProperty, value);
         }
 
-        private void DrawImage(int width, int height, Action<SKCanvas> action)
+        public RenderMode RenderMode
+        {
+            get => (RenderMode)this.GetValue(RenderModeProperty);
+            set => this.SetValue(RenderModeProperty, value);
+        }
+
+        private static WriteableBitmap DrawImage(int width, int height, Action<SKCanvas> action)
         {
             var info = new SKImageInfo(
                 width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
             var backingStore = new WriteableBitmap(
-                info.Width, info.Height, 96.0 * 1, 96.0 * 1, PixelFormats.Pbgra32, null);
+                info.Width, info.Height, 96.0, 96.0, PixelFormats.Pbgra32, null);
 
             backingStore.Lock();
             using (var surface = SKSurface.Create(info, backingStore.BackBuffer, backingStore.BackBufferStride))
@@ -76,53 +99,170 @@ namespace SkiaImageView
             backingStore.Unlock();
             backingStore.Freeze();
 
-            this.backingStore = backingStore;
+            return backingStore;
+        }
+
+        private async void FetchFromUrl(Uri url, int executionCount)
+        {
+            if (this.RenderMode != RenderMode.Synchronously)
+            {
+                // Offloading fetch process.
+                using var stream = await httpClient.Value.GetStreamAsync(url).
+                    ConfigureAwait(false);
+
+                var bmp = SKBitmap.Decode(stream);
+                var backingStore = DrawImage(
+                    bmp.Width, bmp.Height,
+                    canvas => canvas.DrawBitmap(bmp, default(SKPoint)));
+
+                // Switch to UI thread.
+                var _ = this.Dispatcher.BeginInvoke(() =>
+                {
+                    // Avoid race condition.
+                    if (executionCount == this.executionCount)
+                    {
+                        this.backingStore = backingStore;
+                        this.InvalidateMeasure();
+                    }
+                }, DispatcherPriority.ApplicationIdle);
+            }
+            else
+            {
+                // DIRTY: For synchronously operation.
+                // It's pseudo synchronously operation between beginning and finished.
+                // Next of GetResult is onto worker thread.
+                using var stream = httpClient.Value.GetStreamAsync(url).
+                    ConfigureAwait(false).GetAwaiter().GetResult();
+
+                var bmp = SKBitmap.Decode(stream);
+                var backingStore = DrawImage(
+                    bmp.Width, bmp.Height,
+                    canvas => canvas.DrawBitmap(bmp, default(SKPoint)));
+
+                // Switch to UI thread.
+                var _ = this.Dispatcher.BeginInvoke(() =>
+                {
+                    // Avoid race condition.
+                    if (executionCount == this.executionCount)
+                    {
+                        this.backingStore = backingStore;
+                        this.InvalidateMeasure();
+                    }
+                }, DispatcherPriority.Normal);   // Higher priority
+            }
+        }
+
+        private void DrawImageAndSet(
+            int width, int height, int executionCount, Action<SKCanvas> action)
+        {
+            if (this.RenderMode == RenderMode.Asynchronously)
+            {
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    var backingStore = DrawImage(width, height, action);
+
+                    this.Dispatcher.BeginInvoke(() =>
+                    {
+                        // Avoid race condition.
+                        if (executionCount == this.executionCount)
+                        {
+                            this.backingStore = backingStore;
+                            this.InvalidateMeasure();
+                        }
+                    });
+                }, DispatcherPriority.ApplicationIdle);
+            }
+            else
+            {
+                this.backingStore = DrawImage(width, height, action);
+                this.InvalidateMeasure();
+            }
         }
 
         private void OnBitmapChanged(DependencyPropertyChangedEventArgs e)
         {
+            var executionCount = Interlocked.Increment(ref this.executionCount);
+
             if (this.Source is SKBitmap bitmap)
             {
-                this.DrawImage(
-                    bitmap.Width, bitmap.Height,
+                this.DrawImageAndSet(
+                    bitmap.Width, bitmap.Height, executionCount,
                     canvas => canvas.DrawBitmap(bitmap, default(SKPoint)));
             }
             else if (this.Source is SKImage image)
             {
-                this.DrawImage(
-                    image.Width, image.Height,
+                this.DrawImageAndSet(
+                    image.Width, image.Height, executionCount,
                     canvas => canvas.DrawImage(image, default(SKPoint)));
             }
             else if (this.Source is SKPicture picture)
             {
-                this.DrawImage(
-                    (int)base.RenderSize.Width, (int)base.RenderSize.Height,
+                this.DrawImageAndSet(
+                    (int)base.RenderSize.Width, (int)base.RenderSize.Height, executionCount,
                     canvas => canvas.DrawPicture(picture, default(SKPoint)));
             }
             else if (this.Source is SKDrawable drawable)
             {
-                this.DrawImage(
-                    (int)base.RenderSize.Width, (int)base.RenderSize.Height,
+                this.DrawImageAndSet(
+                    (int)base.RenderSize.Width, (int)base.RenderSize.Height, executionCount,
                     canvas => canvas.DrawDrawable(drawable, default(SKPoint)));
             }
             else if (this.Source is SKSurface surface)
             {
-                this.DrawImage(
-                    (int)base.RenderSize.Width, (int)base.RenderSize.Height,
+                this.DrawImageAndSet(
+                    (int)base.RenderSize.Width, (int)base.RenderSize.Height, executionCount,
                     canvas => canvas.DrawSurface(surface, default(SKPoint)));
+            }
+            else if (this.Source is string urlString)
+            {
+                this.backingStore = null;
+                this.InvalidateVisual();
+                this.FetchFromUrl(new Uri(urlString), executionCount);
+            }
+            else if (this.Source is Uri url)
+            {
+                this.backingStore = null;
+                this.InvalidateVisual();
+                this.FetchFromUrl(url, executionCount);
             }
             else if (this.Source != null)
             {
                 Trace.WriteLine(
                     $"SKImageView: Unknown image type, ignored.: {this.Source.GetType().FullName}");
+                this.backingStore = null;
+                this.InvalidateVisual();
             }
             else
             {
                 this.backingStore = null;
+                this.InvalidateVisual();
             }
-
-            this.InvalidateVisual();
         }
+
+        private Size InternalMeasureArrangeOverride(Size targetSize)
+        {
+            if (this.backingStore is { } backingStore)
+            {
+                var scaleFactor = Internals.ComputeScaleFactor(
+                    targetSize,
+                    new Size(backingStore.Width, backingStore.Height),
+                    this.Stretch,
+                    this.StretchDirection);
+                return new Size(
+                    backingStore.Width * scaleFactor.Width,
+                    backingStore.Height * scaleFactor.Height);
+            }
+            else
+            {
+                return default;
+            }
+        }
+
+        protected override Size MeasureOverride(Size constraint) =>
+            this.InternalMeasureArrangeOverride(constraint);
+
+        protected override Size ArrangeOverride(Size arrangeSize) =>
+            this.InternalMeasureArrangeOverride(arrangeSize);
 
         protected override void OnRender(DrawingContext drawingContext)
         {
@@ -130,50 +270,7 @@ namespace SkiaImageView
 
             if (this.backingStore is { } backingStore)
             {
-                if (backingStore.Width > 0 && backingStore.Height > 0 &&
-                    base.RenderSize.Width > 0 && base.RenderSize.Height > 0)
-                {
-                    switch (this.Stretch)
-                    {
-                        case Stretch.Fill:
-                            drawingContext.DrawImage(
-                                backingStore,
-                                new Rect(0, 0, base.RenderSize.Width, base.RenderSize.Height));
-                            break;
-
-                        case Stretch.Uniform:
-                            Rect rect;
-                            if (((double)base.RenderSize.Width / base.RenderSize.Height) >
-                                ((double)backingStore.Width / backingStore.Height))
-                            {
-                                var width = (double)base.RenderSize.Height / backingStore.Height *
-                                    backingStore.Width;
-                                var left = (base.RenderSize.Width - width) / 2;
-
-                                rect = new Rect(left, 0, width, base.RenderSize.Height);
-                            }
-                            else
-                            {
-                                var height = (double)base.RenderSize.Width / backingStore.Width *
-                                    backingStore.Height;
-                                var top = (base.RenderSize.Height - height) / 2;
-
-                                rect = new Rect(0, top, base.RenderSize.Width, height);
-                            }
-                            drawingContext.DrawImage(backingStore, rect);
-                            break;
-
-                        default:
-                            drawingContext.DrawImage(
-                                backingStore,
-                                new Rect(
-                                    (base.RenderSize.Width - backingStore.Width) / 2,
-                                    (base.RenderSize.Height - backingStore.Height) / 2,
-                                    backingStore.Width,
-                                    backingStore.Height));
-                            break;
-                    }
-                }
+                drawingContext.DrawImage(backingStore, new Rect(new Point(), base.RenderSize));
             }
         }
     }

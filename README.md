@@ -52,13 +52,15 @@ XAML example:
 
 The `Source` property accepts the following SkiaSharp types:
 
-|Supported Type|Aspect ratio from|
-|:----|:----|
-|`SKBitmap`|Origin|
-|`SKImage`|Origin|
-|`SKPicture`|Measured `RenderSize`|
-|`SKDrawable`|Measured `RenderSize`|
-|`SKSurface`|Measured `RenderSize`|
+|Supported Type|Aspect ratio from|Note|
+|:----|:----|:----|
+|`SKBitmap`|Origin||
+|`SKImage`|Origin||
+|`SKPicture`|Measured `RenderSize`||
+|`SKDrawable`|Measured `RenderSize`||
+|`SKSurface`|Measured `RenderSize`||
+|`string`|Origin|Asynchronous loads from URL string|
+|`Uri`|Origin|Asynchronous loads from URL|
 
 Some types are drawn with aspect ratio corresponding to the current measured `RenderSize` area.
 Therefore, to maintain the aspect ratio, the size must be explicitly controlled in XAML.
@@ -68,3 +70,16 @@ Therefore, to maintain the aspect ratio, the size must be explicitly controlled 
 ## License
 
 Apache-v2.
+
+----
+
+## History
+
+* 0.4.0:
+  * 
+* 0.3.0:
+  * Fixed XAML namespace.
+* 0.2.0:
+  * Fixed some problems, add WIP feature.
+* 0.1.0:
+  * Initial release.
