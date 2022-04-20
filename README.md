@@ -94,6 +94,8 @@ Apache-v2.
 
 ## History
 
+* 1.0.1:
+  * Downgraded SkiaSharp to 2.80.0 (Because known bug related.)
 * 1.0.0:
   * Reached 1.0.0 🎉
   * Fixed updating new image instance.
