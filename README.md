@@ -70,6 +70,9 @@ The `Source` property accepts the following SkiaSharp types:
 Some types are drawn with aspect ratio corresponding to the current measured `RenderSize` area.
 Therefore, to maintain the aspect ratio, the size must be explicitly controlled in XAML.
 
+Note: If you specify a URL to display, the URL does NOT accept the WPF resource format.
+(`application:` and `pack:` protocol based.)
+
 ### RenderMode property
 
 Choose rendering into back buffer by synchronous or asynchronous:
