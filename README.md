@@ -40,7 +40,7 @@ Fully sample code is here: [SkiaImageView.Wpf.Sample](https://github.com/kekyo/S
 * .NET 6.0, 5.0 (`net6.0-windows`, `net5.0-windows`)
 * .NET Core 3.1, 3.0 (`netcoreapp3.1`, `netcoreapp3.0`)
 * .NET Framework 4.8, 4.6.2 (`net48`, `net462`)
-* SkiaSharp: 2.80.3 or upper.
+* SkiaSharp: 2.80.0 or upper.
 
 ----
 
