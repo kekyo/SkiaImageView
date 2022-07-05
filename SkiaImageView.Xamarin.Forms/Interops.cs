@@ -20,10 +20,11 @@ namespace SkiaImageView
             where THost : BindableObject =>
             BindableProperty.Create(
                 memberName, typeof(TTarget), typeof(THost),
-                defaultValue, BindingMode.OneWay, null, (s, o, n) => changed((THost)s, (TTarget)o, (TTarget)n));
+                defaultValue, BindingMode.OneWay, null,
+                (s, o, n) => changed((THost)s, (TTarget)o, (TTarget)n));
 
         public static void InvokeAsynchronously(
-            this IDispatcher dispatcher, Action action) =>
+            this IDispatcher dispatcher, Action action, bool isHigherPriority) =>
             dispatcher.BeginInvokeOnMainThread(action);
     }
 }

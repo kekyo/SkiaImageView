@@ -21,10 +21,14 @@ namespace SkiaImageView
             where THost : DependencyObject =>
             DependencyProperty.Register(
                 memberName, typeof(TTarget), typeof(THost),
-                new PropertyMetadata(defaultValue, (s, e) => changed((THost)s, (TTarget)e.OldValue, (TTarget)e.NewValue)));
+                new PropertyMetadata(
+                    defaultValue,
+                    (s, e) => changed((THost)s, (TTarget)e.OldValue, (TTarget)e.NewValue)));
 
         public static void InvokeAsynchronously(
-            this Dispatcher dispatcher, Action action) =>
-            dispatcher.BeginInvoke(action, DispatcherPriority.ApplicationIdle);
+            this Dispatcher dispatcher, Action action, bool isHigherPriority) =>
+            dispatcher.BeginInvoke(
+                action,
+                isHigherPriority ? DispatcherPriority.Normal : DispatcherPriority.ApplicationIdle);
     }
 }

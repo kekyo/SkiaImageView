@@ -24,9 +24,8 @@ using System.Windows.Threading;
 
 #if XAMARIN_FORMS
 using Xamarin.Forms;
-using FrameworkElement = Xamarin.Forms.Page;
+using FrameworkElement = Xamarin.Forms.VisualElement;
 using DependencyProperty = Xamarin.Forms.BindableProperty;
-using WriteableBitmap = Xamarin.Forms.Image;
 #endif
 
 namespace SkiaImageView
@@ -46,11 +45,11 @@ namespace SkiaImageView
 
         public static readonly DependencyProperty StretchProperty =
             Interops.Register<Stretch, SKImageView>(
-                nameof(Stretch), Stretch.None, (d, o, n) => d.InvalidateVisual());
+                nameof(Stretch), Stretch.None, (d, o, n) => d.Invalidate(false));
 
         public static readonly DependencyProperty StretchDirectionProperty =
             Interops.Register<StretchDirection, SKImageView>(
-                nameof(StretchDirection), StretchDirection.UpOnly, (d, o, n) => d.InvalidateVisual());
+                nameof(StretchDirection), StretchDirection.UpOnly, (d, o, n) => d.Invalidate(false));
 
         public static readonly DependencyProperty RenderModeProperty =
             Interops.Register<RenderMode, SKImageView>(
@@ -61,6 +60,21 @@ namespace SkiaImageView
 
         private WriteableBitmap? backingStore;
         private volatile int executionCount;
+
+#if WPF
+        private void Invalidate(bool both)
+        {
+            if (both)
+            {
+                base.InvalidateMeasure();
+            }
+            base.InvalidateVisual();
+        }
+#endif
+#if XAMARIN_FORMS
+        private void Invalidate(bool both) =>
+            base.InvalidateMeasure();
+#endif
 
         public object Source
         {
@@ -124,10 +138,9 @@ namespace SkiaImageView
                     if (executionCount == this.executionCount)
                     {
                         this.backingStore = backingStore;
-                        this.InvalidateMeasure();
-                        this.InvalidateVisual();
+                        this.Invalidate(true);
                     }
-                });
+                }, false);
             }
             else
             {
@@ -143,16 +156,15 @@ namespace SkiaImageView
                     canvas => canvas.DrawBitmap(bmp, default(SKPoint)));
 
                 // Switch to UI thread.
-                var _ = this.Dispatcher.BeginInvoke(() =>
+                this.Dispatcher.InvokeAsynchronously(() =>
                 {
                     // Avoid race condition.
                     if (executionCount == this.executionCount)
                     {
                         this.backingStore = backingStore;
-                        this.InvalidateMeasure();
-                        this.InvalidateVisual();
+                        this.Invalidate(true);
                     }
-                }, DispatcherPriority.Normal);   // Higher priority
+                }, true);   // Higher priority
             }
         }
 
@@ -165,23 +177,21 @@ namespace SkiaImageView
                 {
                     var backingStore = DrawImage(width, height, action);
 
-                    this.Dispatcher.BeginInvoke(() =>
+                    this.Dispatcher.InvokeAsynchronously(() =>
                     {
                         // Avoid race condition.
                         if (executionCount == this.executionCount)
                         {
                             this.backingStore = backingStore;
-                            this.InvalidateMeasure();
-                            this.InvalidateVisual();
+                            this.Invalidate(true);
                         }
                     });
-                }, DispatcherPriority.ApplicationIdle);
+                }, false);
             }
             else
             {
                 this.backingStore = DrawImage(width, height, action);
-                this.InvalidateMeasure();
-                this.InvalidateVisual();
+                this.Invalidate(true);
             }
         }
 
@@ -222,13 +232,13 @@ namespace SkiaImageView
             else if (this.Source is string urlString)
             {
                 this.backingStore = null;
-                this.InvalidateVisual();
+                this.Invalidate(false);
                 this.FetchFromUrl(new Uri(urlString), executionCount);
             }
             else if (this.Source is Uri url)
             {
                 this.backingStore = null;
-                this.InvalidateVisual();
+                this.Invalidate(false);
                 this.FetchFromUrl(url, executionCount);
             }
             else if (this.Source != null)
@@ -236,12 +246,12 @@ namespace SkiaImageView
                 Trace.WriteLine(
                     $"SKImageView: Unknown image type, ignored.: {this.Source.GetType().FullName}");
                 this.backingStore = null;
-                this.InvalidateVisual();
+                this.Invalidate(false);
             }
             else
             {
                 this.backingStore = null;
-                this.InvalidateVisual();
+                this.Invalidate(false);
             }
         }
 
