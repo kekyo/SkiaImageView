@@ -16,9 +16,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{21FDD3AF-8715-452F-8250-BDD23B982AB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkiaImageView.Wpf.Sample", "samples\SkiaImageView.Wpf.Sample\SkiaImageView.Wpf.Sample\SkiaImageView.Wpf.Sample.csproj", "{5901C4BB-007E-4C07-90EC-283B55148AA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkiaImageView.Wpf.Sample", "samples\SkiaImageView.Wpf.Sample\SkiaImageView.Wpf.Sample\SkiaImageView.Wpf.Sample.csproj", "{5901C4BB-007E-4C07-90EC-283B55148AA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkiaImageView.Wpf.Sample.Core", "samples\SkiaImageView.Wpf.Sample\SkiaImageView.Wpf.Sample.Core\SkiaImageView.Wpf.Sample.Core.csproj", "{587CE168-A391-445D-AFC8-0FD729405CBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkiaImageView.Wpf.Sample.Core", "samples\SkiaImageView.Wpf.Sample\SkiaImageView.Wpf.Sample.Core\SkiaImageView.Wpf.Sample.Core.csproj", "{587CE168-A391-445D-AFC8-0FD729405CBE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkiaImageView.Xamarin.Forms", "SkiaImageView.Xamarin.Forms\SkiaImageView.Xamarin.Forms.csproj", "{38667D04-60F2-4C70-B7A2-EC5ED92AA720}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{587CE168-A391-445D-AFC8-0FD729405CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{587CE168-A391-445D-AFC8-0FD729405CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{587CE168-A391-445D-AFC8-0FD729405CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38667D04-60F2-4C70-B7A2-EC5ED92AA720}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38667D04-60F2-4C70-B7A2-EC5ED92AA720}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38667D04-60F2-4C70-B7A2-EC5ED92AA720}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38667D04-60F2-4C70-B7A2-EC5ED92AA720}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

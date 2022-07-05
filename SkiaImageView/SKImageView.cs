@@ -13,11 +13,21 @@ using System;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
+
+#if WPF
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+#endif
+
+#if XAMARIN_FORMS
+using Xamarin.Forms;
+using FrameworkElement = Xamarin.Forms.Page;
+using DependencyProperty = Xamarin.Forms.BindableProperty;
+using WriteableBitmap = Xamarin.Forms.Image;
+#endif
 
 namespace SkiaImageView
 {
@@ -31,28 +41,20 @@ namespace SkiaImageView
     public sealed class SKImageView : FrameworkElement
     {
         public static readonly DependencyProperty SourceProperty =
-            DependencyProperty.Register(
-                nameof(Source), typeof(object), typeof(SKImageView),
-                new PropertyMetadata(
-                    null, (s, e) => ((SKImageView)s).OnBitmapChanged(e)));
+            Interops.Register<object?, SKImageView>(
+                nameof(Source), null, (d, o, n) => d.OnBitmapChanged());
 
         public static readonly DependencyProperty StretchProperty =
-            DependencyProperty.Register(
-                nameof(Stretch), typeof(Stretch), typeof(SKImageView),
-                new PropertyMetadata(
-                    Stretch.Uniform, (s, e) => ((SKImageView)s).InvalidateVisual()));
+            Interops.Register<Stretch, SKImageView>(
+                nameof(Stretch), Stretch.None, (d, o, n) => d.InvalidateVisual());
 
         public static readonly DependencyProperty StretchDirectionProperty =
-            DependencyProperty.Register(
-                nameof(StretchDirection), typeof(StretchDirection), typeof(SKImageView),
-                new PropertyMetadata(
-                    StretchDirection.Both, (s, e) => ((SKImageView)s).InvalidateVisual()));
+            Interops.Register<StretchDirection, SKImageView>(
+                nameof(StretchDirection), StretchDirection.UpOnly, (d, o, n) => d.InvalidateVisual());
 
         public static readonly DependencyProperty RenderModeProperty =
-            DependencyProperty.Register(
-                nameof(RenderMode), typeof(RenderMode), typeof(SKImageView),
-                new PropertyMetadata(
-                    RenderMode.AsynchronouslyForFetching, (s, e) => ((SKImageView)s).OnBitmapChanged(e)));
+            Interops.Register<RenderMode, SKImageView>(
+                nameof(RenderMode), RenderMode.AsynchronouslyForFetching, (d, o, n) => d.OnBitmapChanged());
 
         private static readonly Lazy<HttpClient> httpClient =
             new Lazy<HttpClient>(() => new HttpClient());
@@ -116,7 +118,7 @@ namespace SkiaImageView
                     canvas => canvas.DrawBitmap(bmp, default(SKPoint)));
 
                 // Switch to UI thread.
-                var _ = this.Dispatcher.BeginInvoke(() =>
+                this.Dispatcher.InvokeAsynchronously(() =>
                 {
                     // Avoid race condition.
                     if (executionCount == this.executionCount)
@@ -125,7 +127,7 @@ namespace SkiaImageView
                         this.InvalidateMeasure();
                         this.InvalidateVisual();
                     }
-                }, DispatcherPriority.ApplicationIdle);
+                });
             }
             else
             {
@@ -183,7 +185,7 @@ namespace SkiaImageView
             }
         }
 
-        private void OnBitmapChanged(DependencyPropertyChangedEventArgs e)
+        private void OnBitmapChanged()
         {
             var executionCount = Interlocked.Increment(ref this.executionCount);
 

@@ -9,9 +9,16 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using System;
+
+#if WPF
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+#endif
+
+#if XAMARIN_FORMS
+using Xamarin.Forms;
+#endif
 
 namespace SkiaImageView
 {
