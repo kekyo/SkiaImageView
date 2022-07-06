@@ -1,0 +1,19 @@
+﻿<!--
+////////////////////////////////////////////////////////////////////////////
+//
+// SkiaImageView.Wpf - Easy way showing SkiaSharp-based image objects onto WPF applications.
+//
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
+//
+// Licensed under Apache-v2: https://opensource.org/licenses/Apache-2.0
+//
+////////////////////////////////////////////////////////////////////////////
+-->
+
+<Application
+    x:Class="SkiaImageView.Xamarin.Forms.Sample.UWP.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SkiaImageView.Xamarin.Forms.Sample">
+
+</Application>

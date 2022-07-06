@@ -185,7 +185,7 @@ namespace SkiaImageView
                             this.backingStore = backingStore;
                             this.Invalidate(true);
                         }
-                    });
+                    }, false);
                 }, false);
             }
             else
