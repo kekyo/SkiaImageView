@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// SkiaImageView.Wpf - Easy way showing SkiaSharp-based image objects onto WPF applications.
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
 //
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
@@ -11,9 +11,11 @@
 using Epoxy;
 using Epoxy.Synchronized;
 using SkiaImageView.Sample.Models;
+using SkiaSharp;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 // Conflicted between Xamarin.Forms.Command and Epoxy.Command.
@@ -46,22 +48,17 @@ namespace SkiaImageView.Sample.ViewModels
 
                     this.Items.Clear();
 
-                    static async ValueTask<ImageSource> FetchImageAsync(Uri url)
-                    {
-                        var data = await Reddit.FetchImageAsync(url);
-                        return new StreamImageSource
-                        {
-                            Stream = _ => Task.FromResult((Stream)new MemoryStream(data))
-                        };
-                    }
+                    static async ValueTask<SKBitmap?> FetchImageAsync(Uri url) =>
+                        SKBitmap.Decode(await Reddit.FetchImageAsync(url));
 
-                    foreach (var reddit in reddits)
+                    foreach (var reddit in reddits.Take(3))
                     {
                         this.Items.Add(new ItemViewModel
                         {
                             Title = reddit.Title,
                             Score = reddit.Score,
-                            Image = await FetchImageAsync(reddit.Url)
+                            Image = await FetchImageAsync(reddit.Url),
+                            //Image = reddit.Url,
                         });
                     }
                 }

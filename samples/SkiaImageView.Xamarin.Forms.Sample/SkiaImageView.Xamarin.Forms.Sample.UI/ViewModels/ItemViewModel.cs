@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// SkiaImageView.Wpf - Easy way showing SkiaSharp-based image objects onto WPF applications.
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
 //
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
@@ -18,7 +18,7 @@ namespace SkiaImageView.Sample.ViewModels
     {
         public string? Title { get; set; }
 
-        public ImageSource? Image { get; set; }
+        public object? Image { get; set; }
 
         public int Score { get; set; }
     }

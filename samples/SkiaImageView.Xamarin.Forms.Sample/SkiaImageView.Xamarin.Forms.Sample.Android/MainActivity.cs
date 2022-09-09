@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// SkiaImageView.Wpf - Easy way showing SkiaSharp-based image objects onto WPF applications.
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
 //
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
@@ -13,10 +13,10 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 
-namespace SkiaImageView.Xamarin.Forms.Sample
+namespace SkiaImageView.Sample
 {
     [Activity(
-        Label = "SkiaImageView.Xamarin.Forms.Sample",
+        Label = "SkiaImageView.Sample",
         Icon = "@mipmap/icon",
         Theme = "@style/MainTheme",
         MainLauncher = true,

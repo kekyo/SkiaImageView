@@ -4,10 +4,13 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <DefineConstants>$(DefineConstants);XAMARIN_FORMS</DefineConstants>
+    <AssemblyName>SkiaImageView</AssemblyName>
+    <AssemblyTitle>SkiaImageView.Xamarin.Forms</AssemblyTitle>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2401" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.0" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />
     <PackageReference Include="SkiaSharp" Version="2.80.0" />
   </ItemGroup>
 

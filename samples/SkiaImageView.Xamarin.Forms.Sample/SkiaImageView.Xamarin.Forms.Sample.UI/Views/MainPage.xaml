@@ -1,7 +1,7 @@
 ﻿<!--
 ////////////////////////////////////////////////////////////////////////////
 //
-// SkiaImageView.Wpf - Easy way showing SkiaSharp-based image objects onto WPF applications.
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
 //
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
@@ -15,6 +15,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:epoxy="https://github.com/kekyo/Epoxy"
+    xmlns:siv="clr-namespace:SkiaImageView;assembly=SkiaImageView"
     xmlns:viewmodels="clr-namespace:SkiaImageView.Sample.ViewModels"
     xmlns:converters="clr-namespace:SkiaImageView.Sample.Views.Converters">
 
@@ -48,10 +49,10 @@
                             <Label Text="{Binding Title}"
                                    TextColor="White"
                                    Background="{Binding Score, Converter={StaticResource ScoreToBrushConverter}}"/>
-                            <Image Margin="5,0,5,0"
-                                   Source="{Binding Image}"
-                                   HorizontalOptions="EndAndExpand" VerticalOptions="Center"
-                                   Aspect="AspectFit" />
+                            <siv:SKImageView
+                                Margin="5,3,5,0"
+                                Source="{Binding Image}"
+                                Stretch="Uniform" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

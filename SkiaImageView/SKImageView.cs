@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// SkiaImageView.Wpf - Easy way showing SkiaSharp-based image objects onto WPF applications.
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
 //
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
@@ -24,7 +24,6 @@ using System.Windows.Threading;
 
 #if XAMARIN_FORMS
 using Xamarin.Forms;
-using FrameworkElement = Xamarin.Forms.VisualElement;
 using DependencyProperty = Xamarin.Forms.BindableProperty;
 #endif
 
@@ -37,19 +36,29 @@ namespace SkiaImageView
         Asynchronously,
     }
 
-    public sealed class SKImageView : FrameworkElement
+    public sealed class SKImageView :
+#if WPF
+        FrameworkElement
+#elif XAMARIN_FORMS
+        Image
+#endif
     {
+#if WPF
         public static readonly DependencyProperty SourceProperty =
             Interops.Register<object?, SKImageView>(
                 nameof(Source), null, (d, o, n) => d.OnBitmapChanged());
-
+#elif XAMARIN_FORMS
+        public static new readonly DependencyProperty SourceProperty =
+            Interops.Register<object?, SKImageView>(
+                nameof(Source), null, (d, o, n) => d.OnBitmapChanged());
+#endif
         public static readonly DependencyProperty StretchProperty =
             Interops.Register<Stretch, SKImageView>(
                 nameof(Stretch), Stretch.None, (d, o, n) => d.Invalidate(false));
 
         public static readonly DependencyProperty StretchDirectionProperty =
             Interops.Register<StretchDirection, SKImageView>(
-                nameof(StretchDirection), StretchDirection.UpOnly, (d, o, n) => d.Invalidate(false));
+                nameof(StretchDirection), StretchDirection.Both, (d, o, n) => d.Invalidate(false));
 
         public static readonly DependencyProperty RenderModeProperty =
             Interops.Register<RenderMode, SKImageView>(
@@ -58,7 +67,7 @@ namespace SkiaImageView
         private static readonly Lazy<HttpClient> httpClient =
             new Lazy<HttpClient>(() => new HttpClient());
 
-        private WriteableBitmap? backingStore;
+        private BackingStore? backingStore;
         private volatile int executionCount;
 
 #if WPF
@@ -70,17 +79,27 @@ namespace SkiaImageView
             }
             base.InvalidateVisual();
         }
-#endif
-#if XAMARIN_FORMS
-        private void Invalidate(bool both) =>
-            base.InvalidateMeasure();
-#endif
 
         public object Source
         {
             get => this.GetValue(SourceProperty);
             set => this.SetValue(SourceProperty, value);
         }
+#elif XAMARIN_FORMS
+        public SKImageView()
+        {
+            base.Aspect = Aspect.AspectFill;
+        }
+
+        private void Invalidate(bool both) =>
+            base.InvalidateMeasure();
+
+        public new object Source
+        {
+            get => this.GetValue(SourceProperty);
+            set => this.SetValue(SourceProperty, value);
+        }
+#endif
 
         public Stretch Stretch
         {
@@ -100,20 +119,35 @@ namespace SkiaImageView
             set => this.SetValue(RenderModeProperty, value);
         }
 
-        private static WriteableBitmap DrawImage(int width, int height, Action<SKCanvas> action)
+#if WPF
+        private void UpdateWith(BackingStore? backingStore)
+        {
+            this.backingStore = backingStore;
+            this.Invalidate(true);
+        }
+#elif XAMARIN_FORMS
+        private Size RenderSize =>
+            new Size(base.Width, base.Height);
+
+        private void UpdateWith(BackingStore? backingStore)
+        {
+            this.backingStore = backingStore;
+            base.Source = this.backingStore?.GetImageSource();
+        }
+#endif
+
+        private static BackingStore DrawImage(int width, int height, Action<SKCanvas> action)
         {
             var info = new SKImageInfo(
                 width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-            var backingStore = new WriteableBitmap(
-                info.Width, info.Height, 96.0, 96.0, PixelFormats.Pbgra32, null);
+            var backingStore = new BackingStore(info.Width, info.Height);
 
-            backingStore.Lock();
-            using (var surface = SKSurface.Create(info, backingStore.BackBuffer, backingStore.BackBufferStride))
+            using (var surface = backingStore.GetSurface())
             {
                 action(surface.Canvas);
             }
-            backingStore.Unlock();
-            backingStore.Freeze();
+
+            backingStore.Finish();
 
             return backingStore;
         }
@@ -137,8 +171,7 @@ namespace SkiaImageView
                     // Avoid race condition.
                     if (executionCount == this.executionCount)
                     {
-                        this.backingStore = backingStore;
-                        this.Invalidate(true);
+                        this.UpdateWith(backingStore);
                     }
                 }, false);
             }
@@ -161,8 +194,7 @@ namespace SkiaImageView
                     // Avoid race condition.
                     if (executionCount == this.executionCount)
                     {
-                        this.backingStore = backingStore;
-                        this.Invalidate(true);
+                        this.UpdateWith(backingStore);
                     }
                 }, true);   // Higher priority
             }
@@ -182,16 +214,15 @@ namespace SkiaImageView
                         // Avoid race condition.
                         if (executionCount == this.executionCount)
                         {
-                            this.backingStore = backingStore;
-                            this.Invalidate(true);
+                            this.UpdateWith(backingStore);
                         }
                     }, false);
                 }, false);
             }
             else
             {
-                this.backingStore = DrawImage(width, height, action);
-                this.Invalidate(true);
+                var backingStore = DrawImage(width, height, action);
+                this.UpdateWith(backingStore);
             }
         }
 
@@ -213,45 +244,44 @@ namespace SkiaImageView
             }
             else if (this.Source is SKPicture picture)
             {
+                var renderSize = this.RenderSize;
                 this.DrawImageAndSet(
-                    (int)base.RenderSize.Width, (int)base.RenderSize.Height, executionCount,
+                    (int)renderSize.Width, (int)renderSize.Height, executionCount,
                     canvas => canvas.DrawPicture(picture, default(SKPoint)));
             }
             else if (this.Source is SKDrawable drawable)
             {
+                var renderSize = this.RenderSize;
                 this.DrawImageAndSet(
-                    (int)base.RenderSize.Width, (int)base.RenderSize.Height, executionCount,
+                    (int)renderSize.Width, (int)renderSize.Height, executionCount,
                     canvas => canvas.DrawDrawable(drawable, default(SKPoint)));
             }
             else if (this.Source is SKSurface surface)
             {
+                var renderSize = this.RenderSize;
                 this.DrawImageAndSet(
-                    (int)base.RenderSize.Width, (int)base.RenderSize.Height, executionCount,
+                    (int)renderSize.Width, (int)renderSize.Height, executionCount,
                     canvas => canvas.DrawSurface(surface, default(SKPoint)));
             }
             else if (this.Source is string urlString)
             {
-                this.backingStore = null;
-                this.Invalidate(false);
+                this.UpdateWith(null);
                 this.FetchFromUrl(new Uri(urlString), executionCount);
             }
             else if (this.Source is Uri url)
             {
-                this.backingStore = null;
-                this.Invalidate(false);
+                this.UpdateWith(null);
                 this.FetchFromUrl(url, executionCount);
             }
             else if (this.Source != null)
             {
                 Trace.WriteLine(
-                    $"SKImageView: Unknown image type, ignored.: {this.Source.GetType().FullName}");
-                this.backingStore = null;
-                this.Invalidate(false);
+                    $"SKImageView: Unknown image type, ignored: {this.Source.GetType().FullName}");
+                this.UpdateWith(null);
             }
             else
             {
-                this.backingStore = null;
-                this.Invalidate(false);
+                this.UpdateWith(null);
             }
         }
 
@@ -261,12 +291,12 @@ namespace SkiaImageView
             {
                 var scaleFactor = Internals.ComputeScaleFactor(
                     targetSize,
-                    new Size(backingStore.Width, backingStore.Height),
+                    backingStore.Size,
                     this.Stretch,
                     this.StretchDirection);
                 return new Size(
-                    backingStore.Width * scaleFactor.Width,
-                    backingStore.Height * scaleFactor.Height);
+                    backingStore.Size.Width * scaleFactor.Width,
+                    backingStore.Size.Height * scaleFactor.Height);
             }
             else
             {
@@ -274,6 +304,7 @@ namespace SkiaImageView
             }
         }
 
+#if WPF
         protected override Size MeasureOverride(Size constraint) =>
             this.InternalMeasureArrangeOverride(constraint);
 
@@ -283,11 +314,15 @@ namespace SkiaImageView
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
-
+        
             if (this.backingStore is { } backingStore)
             {
-                drawingContext.DrawImage(backingStore, new Rect(new Point(), base.RenderSize));
+                backingStore.Draw(drawingContext, this.RenderSize);
             }
         }
+#elif XAMARIN_FORMS
+        protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint) =>
+            new SizeRequest(InternalMeasureArrangeOverride(new Size(widthConstraint, heightConstraint)));
+#endif
     }
 }

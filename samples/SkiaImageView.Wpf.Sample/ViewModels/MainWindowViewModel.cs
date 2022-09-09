@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// SkiaImageView.Wpf - Easy way showing SkiaSharp-based image objects onto WPF applications.
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
 //
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
@@ -44,8 +44,8 @@ namespace SkiaImageView.Sample.ViewModels
 
                     this.Items.Clear();
 
-                    //static async ValueTask<SKBitmap?> FetchImageAsync(Uri url) =>
-                    //    SKBitmap.Decode(await Reddit.FetchImageAsync(url));
+                    static async ValueTask<SKBitmap?> FetchImageAsync(Uri url) =>
+                        SKBitmap.Decode(await Reddit.FetchImageAsync(url));
 
                     foreach (var reddit in reddits)
                     {
@@ -53,8 +53,8 @@ namespace SkiaImageView.Sample.ViewModels
                         {
                             Title = reddit.Title,
                             Score = reddit.Score,
-                            //Image = await FetchImageAsync(reddit.Url),
-                            Image = reddit.Url,
+                            Image = await FetchImageAsync(reddit.Url),
+                            //Image = reddit.Url,
                         });
                     }
                 }

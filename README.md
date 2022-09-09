@@ -1,6 +1,6 @@
-# SkiaImageView.Wpf
+# SkiaImageView
 
-![SkiaImageView.Wpf](Images/SkiaImageView.Wpf.100.png)
+![SkiaImageView](Images/SkiaImageView.100.png)
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
@@ -9,12 +9,13 @@
 |Package|NuGet|
 |:--|:--|
 |SkiaImageView.Wpf|[![NuGet SkiaImageView.Wpf](https://img.shields.io/nuget/v/SkiaImageView.Wpf.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Wpf)|
+|SkiaImageView.Xamarin.Forms|[![NuGet SkiaImageView.Xamarin.Forms](https://img.shields.io/nuget/v/SkiaImageView.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Xamarin.Forms)|
 
 ----
 
 ## What is this?
 
-Easy way showing [SkiaSharp](https://github.com/mono/SkiaSharp)-based image objects onto WPF applications.
+Easy way showing [SkiaSharp](https://github.com/mono/SkiaSharp)-based image objects onto UI applications.
 
 `SKImageView` is a control of SkiaSharp image drawing.
 You can manipulate same as with [WPF's `System.Windows.Controls.Image`](https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=windowsdesktop-6.0).
@@ -24,23 +25,34 @@ Supported SkiaSharp types are: `SKBitmap`, `SKImage`, `SKPicture`, `SKDrawable` 
 XAML example:
 
 ```xml
-<Window xmlns:siv="https://github.com/kekyo/SkiaImageView.Wpf">
+<Window xmlns:siv="https://github.com/kekyo/SkiaImageView">
     <siv:SKImageView
         Stretch="Uniform"
         Source="{Binding PreviewImage}" />
 </Window>
 ```
 
-Fully sample code is here: [SkiaImageView.Wpf.Sample](https://github.com/kekyo/SkiaImageView.Wpf/tree/main/samples/SkiaImageView.Wpf.Sample)
+Fully sample code is here:
+
+* [SkiaImageView.Wpf.Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Wpf.Sample)
+* [SkiaImageView.Xamarin.Forms.Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Xamarin.Forms.Sample)
 
 ----
 
 ## Supported platform
 
+* SkiaSharp: 2.80.0 or upper.
+
+### WPF
+
 * .NET 6.0, 5.0 (`net6.0-windows`, `net5.0-windows`)
 * .NET Core 3.1, 3.0 (`netcoreapp3.1`, `netcoreapp3.0`)
 * .NET Framework 4.8, 4.6.2 (`net48`, `net462`)
-* SkiaSharp: 2.80.0 or upper.
+
+### Xamarin Forms
+
+* .NET Standard 2.0 (`netstandard2.0`)
+* Xamarin Forms 5.0.0.2515 or upper
 
 ----
 

@@ -15,18 +15,18 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-namespace SkiaImageView.Xamarin.Forms.Sample.UWP
+namespace SkiaImageView.Sample
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    public partial class App : Application
+    public partial class UwpApp : Application
     {
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
-        public App()
+        public UwpApp()
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;

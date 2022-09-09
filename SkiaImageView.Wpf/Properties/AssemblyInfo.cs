@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// SkiaImageView.Wpf - Easy way showing SkiaSharp-based image objects onto WPF applications.
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
 //
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
@@ -10,5 +10,5 @@
 
 using System.Windows.Markup;
 
-[assembly: XmlnsDefinition("https://github.com/kekyo/SkiaImageView.Wpf", "SkiaImageView")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/SkiaImageView.Wpf", "siv")] 
+[assembly: XmlnsDefinition("https://github.com/kekyo/SkiaImageView", "SkiaImageView")]
+[assembly: XmlnsPrefix("https://github.com/kekyo/SkiaImageView", "siv")] 

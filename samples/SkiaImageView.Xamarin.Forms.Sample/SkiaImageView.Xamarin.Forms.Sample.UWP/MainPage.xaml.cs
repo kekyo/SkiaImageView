@@ -8,7 +8,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-namespace SkiaImageView.Sample.UWP
+namespace SkiaImageView.Sample
 {
     public partial class MainPage
     {
@@ -16,7 +16,7 @@ namespace SkiaImageView.Sample.UWP
         {
             this.InitializeComponent();
 
-            LoadApplication(new SkiaImageView.Sample.App());
+            LoadApplication(new App());
         }
     }
 }
