@@ -69,7 +69,11 @@ jobs:
       run: msbuild -p:Configuration=Release -maxCpuCount -t:restore SkiaImageView.sln
 
     - name: Build
-      run: msbuild -p:Configuration=Release -maxCpuCount SkiaImageView.sln
+      run: |
+        msbuild -p:Configuration=Release SkiaImageView.Wpf\SkiaImageView.Wpf.csproj
+        msbuild -p:Configuration=Release SkiaImageView.Xamarin.Forms\SkiaImageView.Xamarin.Forms.csproj
+        
+    # run: msbuild -p:Configuration=Release -maxCpuCount SkiaImageView.sln
 
     - name: Build NuGet packages
       run: |
