@@ -36,6 +36,17 @@ namespace SkiaImageView
         Asynchronously,
     }
 
+    // Needs only XF.
+    public enum ProjectionQuality
+    {
+        Perfect,
+#if XAMARIN_FORMS
+        High,
+        Middle,
+        Low,
+#endif
+    }
+
     public sealed class SKImageView :
 #if WPF
         FrameworkElement
@@ -63,6 +74,16 @@ namespace SkiaImageView
         public static readonly DependencyProperty RenderModeProperty =
             Interops.Register<RenderMode, SKImageView>(
                 nameof(RenderMode), RenderMode.AsynchronouslyForFetching, (d, o, n) => d.OnBitmapChanged());
+
+        public static readonly DependencyProperty ProjectionQualityProperty =
+            Interops.Register<object?, SKImageView>(
+                nameof(ProjectionQuality),
+#if WPF
+                ProjectionQuality.Perfect,
+#else
+                ProjectionQuality.Middle,
+#endif
+                (_, _, _) => { });
 
         private static readonly Lazy<HttpClient> httpClient =
             new Lazy<HttpClient>(() => new HttpClient());
@@ -119,6 +140,12 @@ namespace SkiaImageView
             set => this.SetValue(RenderModeProperty, value);
         }
 
+        public ProjectionQuality ProjectionQuality
+        {
+            get => (ProjectionQuality)this.GetValue(ProjectionQualityProperty);
+            set => this.SetValue(ProjectionQualityProperty, value);
+        }
+
 #if WPF
         private void UpdateWith(BackingStore? backingStore)
         {
@@ -136,11 +163,12 @@ namespace SkiaImageView
         }
 #endif
 
-        private static BackingStore DrawImage(int width, int height, Action<SKCanvas> action)
+        private static BackingStore DrawImage(
+            int width, int height, ProjectionQuality projectionQuality, Action<SKCanvas> action)
         {
             var info = new SKImageInfo(
                 width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-            var backingStore = new BackingStore(info.Width, info.Height);
+            var backingStore = new BackingStore(info.Width, info.Height, projectionQuality);
 
             using (var surface = backingStore.GetSurface())
             {
@@ -154,6 +182,8 @@ namespace SkiaImageView
 
         private async void FetchFromUrl(Uri url, int executionCount)
         {
+            var projectionQuality = this.ProjectionQuality;
+
             if (this.RenderMode != RenderMode.Synchronously)
             {
                 // Offloading fetch process.
@@ -162,7 +192,7 @@ namespace SkiaImageView
 
                 var bmp = SKBitmap.Decode(stream);
                 var backingStore = DrawImage(
-                    bmp.Width, bmp.Height,
+                    bmp.Width, bmp.Height, projectionQuality,
                     canvas => canvas.DrawBitmap(bmp, default(SKPoint)));
 
                 // Switch to UI thread.
@@ -185,7 +215,7 @@ namespace SkiaImageView
 
                 var bmp = SKBitmap.Decode(stream);
                 var backingStore = DrawImage(
-                    bmp.Width, bmp.Height,
+                    bmp.Width, bmp.Height, projectionQuality,
                     canvas => canvas.DrawBitmap(bmp, default(SKPoint)));
 
                 // Switch to UI thread.
@@ -203,11 +233,14 @@ namespace SkiaImageView
         private void DrawImageAndSet(
             int width, int height, int executionCount, Action<SKCanvas> action)
         {
+            var projectionQuality = this.ProjectionQuality;
+
             if (this.RenderMode == RenderMode.Asynchronously)
             {
                 ThreadPool.QueueUserWorkItem(_ =>
                 {
-                    var backingStore = DrawImage(width, height, action);
+                    var backingStore = DrawImage(
+                        width, height, projectionQuality, action);
 
                     this.Dispatcher.InvokeAsynchronously(() =>
                     {
@@ -221,7 +254,9 @@ namespace SkiaImageView
             }
             else
             {
-                var backingStore = DrawImage(width, height, action);
+                var backingStore = DrawImage(
+                    width, height, projectionQuality, action);
+
                 this.UpdateWith(backingStore);
             }
         }

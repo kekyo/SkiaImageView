@@ -21,7 +21,8 @@ namespace SkiaImageView
         private readonly SKImageInfo imageInfo;
         private readonly WriteableBitmap writableBitmap;
 
-        public BackingStore(int width, int height)
+        public BackingStore(
+            int width, int height, ProjectionQuality projectionQuality)
         {
             this.imageInfo = new SKImageInfo(
                 width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);

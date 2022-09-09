@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
 //
@@ -20,11 +20,14 @@ namespace SkiaImageView
         //   It is force applicable limitation for packaging strategy, be going to separates between platforms.
         //   So, avoid it by will re-encode bitmap to image stream with PNG format in ImageSource object...
         private readonly SKImageInfo imageInfo;
+        private readonly ProjectionQuality projectionQuality;
         private SKBitmap? bitmap;
         private ImageSource? imageSource;
 
-        public BackingStore(int width, int height)
+        public BackingStore(
+            int width, int height, ProjectionQuality projectionQuality)
         {
+            this.projectionQuality = projectionQuality;
             this.imageInfo = new SKImageInfo(
                 width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
             this.bitmap = new SKBitmap(
@@ -39,7 +42,18 @@ namespace SkiaImageView
 
         public void Finish()
         {
-            var bitmapData = this.bitmap!.Encode(SKEncodedImageFormat.Png, 100);
+            // Xamarin Forms is in essence, supposed to be used on smartphones and tablets,
+            // so a Middle quality of 90 does not seem too out of place.
+            // The amount of data can be significantly reduced.
+            var (format, quality) = this.projectionQuality switch
+            {
+                ProjectionQuality.Perfect => (SKEncodedImageFormat.Png, 100),
+                ProjectionQuality.Low => (SKEncodedImageFormat.Jpeg, 80),
+                ProjectionQuality.High => (SKEncodedImageFormat.Jpeg, 95),
+                _ => (SKEncodedImageFormat.Jpeg, 90),
+            };
+
+            var bitmapData = this.bitmap!.Encode(format, quality);
             this.bitmap.Dispose();
             this.bitmap = null;
             this.imageSource = ImageSource.FromStream(() => bitmapData.AsStream());
