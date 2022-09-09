@@ -109,6 +109,9 @@ Apache-v2.
 
 ## History
 
+* 1.2.0:
+  * Fixed misconfigured bitfield of RGBA on Xamarin Forms.
+  * Added ProjectionQuality property for Xamarin Forms (You can adjust final image quality when need to make better performance.)
 * 1.1.0:
   * Supported Xamarin Forms.
 * 1.0.1:
