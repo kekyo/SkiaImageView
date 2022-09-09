@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <DefineConstants>$(DefineConstants);XAMARIN_FORMS</DefineConstants>
+    <AssemblyName>SkiaImageView</AssemblyName>
+    <AssemblyTitle>SkiaImageView.Xamarin.Forms</AssemblyTitle>
+    <PackageId>SkiaImageView.Xamarin.Forms</PackageId>
+    <PackageTags>skiasharp;xamarin-forms;imaging</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />
+    <PackageReference Include="SkiaSharp" Version="2.80.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Images\SkiaImageView.100.png" Pack="true" PackagePath="" />
+    <Compile Include="..\SkiaImageView\**\*.cs" />
+  </ItemGroup>
+
+</Project>

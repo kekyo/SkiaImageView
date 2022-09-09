@@ -8,7 +8,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using System.Windows.Markup;
+using System;
 
-[assembly: XmlnsDefinition("https://github.com/kekyo/SkiaImageView", "SkiaImageView")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/SkiaImageView", "siv")] 
+namespace SkiaImageView.Sample.Models
+{
+    public sealed class RedditPost
+    {
+        public readonly string Title;
+        public readonly Uri Url;
+        public readonly int Score;
+
+        public RedditPost(string title, Uri url, int score)
+        {
+            this.Title = title;
+            this.Url = url;
+            this.Score = score;
+        }
+    }
+}

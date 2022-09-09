@@ -8,7 +8,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using System.Windows.Markup;
-
-[assembly: XmlnsDefinition("https://github.com/kekyo/SkiaImageView", "SkiaImageView")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/SkiaImageView", "siv")] 
+namespace SkiaImageView
+{
+    public enum StretchDirection
+    {
+        UpOnly,
+        DownOnly,
+        Both
+    }
+}

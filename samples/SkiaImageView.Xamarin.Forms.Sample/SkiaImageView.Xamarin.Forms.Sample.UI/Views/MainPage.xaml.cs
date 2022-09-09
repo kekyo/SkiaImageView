@@ -8,7 +8,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using System.Windows.Markup;
+using Xamarin.Forms;
 
-[assembly: XmlnsDefinition("https://github.com/kekyo/SkiaImageView", "SkiaImageView")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/SkiaImageView", "siv")] 
+namespace SkiaImageView.Sample.Views
+{
+    public sealed partial class MainPage : ContentPage
+    {
+        public MainPage() =>
+            InitializeComponent();
+    }
+}
