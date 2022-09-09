@@ -77,8 +77,8 @@ jobs:
 
     - name: Build NuGet packages
       run: |
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts SkiaImageView.Wpf\SkiaImageView.Wpf.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts SkiaImageView.Xamarin.Forms\SkiaImageView.Xamarin.Forms.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Wpf\SkiaImageView.Wpf.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Xamarin.Forms\SkiaImageView.Xamarin.Forms.csproj
 
     #-----------------------------------------------------------------------
     # Test
