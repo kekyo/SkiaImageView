@@ -51,7 +51,7 @@ namespace SkiaImageView.Sample.ViewModels
                     static async ValueTask<SKBitmap?> FetchImageAsync(Uri url) =>
                         SKBitmap.Decode(await Reddit.FetchImageAsync(url));
 
-                    foreach (var reddit in reddits.Take(3))
+                    foreach (var reddit in reddits)
                     {
                         this.Items.Add(new ItemViewModel
                         {

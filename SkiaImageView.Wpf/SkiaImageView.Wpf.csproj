@@ -6,6 +6,7 @@
     <DefineConstants>$(DefineConstants);WPF</DefineConstants>
     <AssemblyName>SkiaImageView</AssemblyName>
     <AssemblyTitle>SkiaImageView.Wpf</AssemblyTitle>
+    <PackageId>SkiaImageView.Wpf</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
