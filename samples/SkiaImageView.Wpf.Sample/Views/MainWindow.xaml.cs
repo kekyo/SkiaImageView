@@ -8,7 +8,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using System.Windows.Markup;
+using System.Windows;
 
-[assembly: XmlnsDefinition("https://github.com/kekyo/SkiaImageView", "SkiaImageView")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/SkiaImageView", "siv")] 
+namespace SkiaImageView.Sample.Views
+{
+    public sealed partial class MainWindow : Window
+    {
+        public MainWindow() =>
+            InitializeComponent();
+    }
+}

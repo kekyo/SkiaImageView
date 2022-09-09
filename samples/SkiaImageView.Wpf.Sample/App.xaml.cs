@@ -8,7 +8,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using System.Windows.Markup;
+using System.Windows;
 
-[assembly: XmlnsDefinition("https://github.com/kekyo/SkiaImageView", "SkiaImageView")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/SkiaImageView", "siv")] 
+namespace SkiaImageView.Sample
+{
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
+    {
+    }
+}

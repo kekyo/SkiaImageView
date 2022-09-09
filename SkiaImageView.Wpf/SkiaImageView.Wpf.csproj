@@ -3,18 +3,26 @@
   <PropertyGroup>
     <TargetFrameworks>net462;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows;net6.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
+    <DefineConstants>$(DefineConstants);WPF</DefineConstants>
+    <AssemblyName>SkiaImageView</AssemblyName>
+    <AssemblyTitle>SkiaImageView.Wpf</AssemblyTitle>
+    <PackageId>SkiaImageView.Wpf</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="All" />
     <PackageReference Include="SkiaSharp" Version="2.80.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <!-- HACK: On only net48, HttpClient.GetStreamAsync(string) is undefined in installed .NET Framework,
-         so couldn't compile it... -->      
+         so couldn't compile it... -->
     <PackageReference Include="System.Net.Http" Version="4.3.4" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Images\SkiaImageView.Wpf.100.png" Pack="true" PackagePath="" />
+    <None Include="..\Images\SkiaImageView.100.png" Pack="true" PackagePath="" />
+    <Compile Include="..\SkiaImageView\**\*.cs" />
   </ItemGroup>
 
 </Project>

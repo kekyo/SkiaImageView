@@ -11,26 +11,26 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/kekyo/SkiaImageView.Wpf.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/kekyo/SkiaImageView.git</RepositoryUrl>
 
     <RootNamespace>SkiaImageView</RootNamespace>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1570;CS1591</NoWarn>
 
-    <Product>SkiaImageView.Wpf</Product>
-    <Trademark>SkiaImageView.Wpf</Trademark>
+    <Product>SkiaImageView</Product>
+    <Trademark>SkiaImageView</Trademark>
     <Copyright>Copyright (c) Kouji Matsui</Copyright>
-    <Description>Easy way showing SkiaSharp-based image objects onto WPF applications.</Description>
+    <Description>Easy way showing SkiaSharp-based image objects onto UI applications.</Description>
 
     <Company>Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)</Company>
     <Authors>Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/kekyo/SkiaImageView.Wpf</PackageProjectUrl>
-    <PackageIcon>SkiaImageView.Wpf.100.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/kekyo/SkiaImageView</PackageProjectUrl>
+    <PackageIcon>SkiaImageView.100.png</PackageIcon>
     <PackageTags>skiasharp;wpf;imaging</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <NoWarn>$(NoWarn);NU1605;NU1701</NoWarn>
+    <NoWarn>$(NoWarn);NU1605;NU1701;NU1803</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' != 'Release'">
@@ -48,7 +48,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RelaxVersioner" Version="2.12.1" PrivateAssets="All" />
+    <PackageReference Include="RelaxVersioner" Version="2.13.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">

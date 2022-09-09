@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 //
 // SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
 //
@@ -8,7 +8,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using System.Windows.Markup;
+using Xamarin.Forms.Xaml;
 
-[assembly: XmlnsDefinition("https://github.com/kekyo/SkiaImageView", "SkiaImageView")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/SkiaImageView", "siv")] 
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]

@@ -8,7 +8,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using System.Windows.Markup;
+using Epoxy;
+using Xamarin.Forms;
 
-[assembly: XmlnsDefinition("https://github.com/kekyo/SkiaImageView", "SkiaImageView")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/SkiaImageView", "siv")] 
+namespace SkiaImageView.Sample.ViewModels
+{
+    [ViewModel]
+    public sealed class ItemViewModel
+    {
+        public string? Title { get; set; }
+
+        public object? Image { get; set; }
+
+        public int Score { get; set; }
+    }
+}
