@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 //
 // SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
 //
@@ -28,7 +28,7 @@ namespace SkiaImageView
             this.imageInfo = new SKImageInfo(
                 width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
             this.bitmap = new SKBitmap(
-                imageInfo.Width, imageInfo.Height, SKColorType.Bgra8888, SKAlphaType.Premul);
+                imageInfo.Width, imageInfo.Height, SKColorType.Rgba8888, SKAlphaType.Premul);
         }
 
         public BackingStore(Uri url) =>
