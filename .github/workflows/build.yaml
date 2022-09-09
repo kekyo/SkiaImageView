@@ -94,13 +94,13 @@ jobs:
       if: startsWith( github.ref, 'refs/tags/' )
       run: |
         dotnet nuget push artifacts\SkiaImageView.Wpf.*.nupkg --source ref1
-        dotnet nuget push artifacts\ESkiaImageView.Xamarin.Forms.*.nupkg --source ref1
+        dotnet nuget push artifacts\SkiaImageView.Xamarin.Forms.*.nupkg --source ref1
 
     #-----------------------------------------------------------------------
     # Deploy packages (main)
 
-    - name: Deploy NuGet package (main/ref2)
-      if: (startsWith( github.ref, 'refs/tags/' )) && (endsWith(steps.extract_branch_name.outputs.branch_name, 'main'))
-      run: |
-        dotnet nuget push artifacts\SkiaImageView.Wpf.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
-        dotnet nuget push artifacts\SkiaImageView.Xamarin.Forms.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #- name: Deploy NuGet package (main/ref2)
+    #  if: (startsWith( github.ref, 'refs/tags/' )) && (endsWith(steps.extract_branch_name.outputs.branch_name, 'main'))
+    #  run: |
+    #    dotnet nuget push artifacts\SkiaImageView.Wpf.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\SkiaImageView.Xamarin.Forms.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
