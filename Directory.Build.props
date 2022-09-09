@@ -28,7 +28,6 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/kekyo/SkiaImageView</PackageProjectUrl>
     <PackageIcon>SkiaImageView.100.png</PackageIcon>
-    <PackageTags>skiasharp;wpf;imaging</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <NoWarn>$(NoWarn);NU1605;NU1701;NU1803</NoWarn>
   </PropertyGroup>
