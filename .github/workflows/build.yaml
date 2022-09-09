@@ -1,0 +1,29 @@
+name: .NET
+
+on: [push]
+
+jobs:
+  build:
+    #runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Setup .NET Core 3.1
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.*
+    - name: Setup .NET 5
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.*
+    - name: Setup .NET 6
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.*
+    - name: Build
+      run: dotnet build --configuration Release
+#    - name: Test
+#      run: dotnet test --no-restore --verbosity normal -p:CITest=True
+#      timeout-minutes: 10
