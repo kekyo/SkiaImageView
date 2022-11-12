@@ -11,20 +11,23 @@
 using System;
 using Xamarin.Forms;
 
-namespace SkiaImageView
-{
-    internal static class Interops
-    {
-        public static BindableProperty Register<TTarget, THost>(
-            string memberName, TTarget defaultValue, Action<THost, TTarget, TTarget> changed)
-            where THost : BindableObject =>
-            BindableProperty.Create(
-                memberName, typeof(TTarget), typeof(THost),
-                defaultValue, BindingMode.OneWay, null,
-                (s, o, n) => changed((THost)s, (TTarget)o, (TTarget)n));
+namespace SkiaImageView;
 
-        public static void InvokeAsynchronously(
-            this IDispatcher dispatcher, Action action, bool isHigherPriority) =>
-            dispatcher.BeginInvokeOnMainThread(action);
-    }
+internal static class Interops
+{
+    public static BindableProperty Register<TTarget, THost>(
+        string memberName, TTarget defaultValue, Action<THost> changed)
+        where THost : BindableObject =>
+        BindableProperty.Create(
+            memberName, typeof(TTarget), typeof(THost),
+            defaultValue, BindingMode.OneWay, null,
+            (s, _, _) => changed((THost)s));
+
+    public static IDispatcher GetDispatcher(
+        this BindableObject b) =>
+        b.Dispatcher;
+
+    public static void InvokeAsynchronously(
+        this IDispatcher dispatcher, Action action, bool isHigherPriority) =>
+        dispatcher.BeginInvokeOnMainThread(action);
 }

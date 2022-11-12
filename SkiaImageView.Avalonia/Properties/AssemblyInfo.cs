@@ -8,18 +8,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Epoxy;
-using SkiaSharp;
+using Avalonia.Metadata;
 
-namespace SkiaImageView.Sample.ViewModels
-{
-    [ViewModel]
-    public sealed class ItemViewModel
-    {
-        public string? Title { get; set; }
-
-        public SKBitmap? Image { get; set; }
-
-        public int Score { get; set; }
-    }
-}
+[assembly: XmlnsDefinition("https://github.com/kekyo/SkiaImageView", "SkiaImageView")]
+[assembly: XmlnsPrefix("https://github.com/kekyo/SkiaImageView", "siv")] 

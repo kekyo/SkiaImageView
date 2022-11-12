@@ -8,30 +8,39 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
+using Avalonia.Layout;
+using Avalonia.Threading;
 using System;
-using System.Windows;
-using System.Windows.Threading;
 
 namespace SkiaImageView;
 
 internal static class Interops
 {
-    public static DependencyProperty Register<TTarget, THost>(
+    public static AvaloniaProperty<TTarget> Register<TTarget, THost>(
         string memberName, TTarget defaultValue, Action<THost> changed)
-        where THost : DependencyObject =>
-        DependencyProperty.Register(
-            memberName, typeof(TTarget), typeof(THost),
-            new PropertyMetadata(
-                defaultValue,
-                (s, _) => changed((THost)s)));
+        where THost : IAvaloniaObject =>
+        AvaloniaProperty.Register<THost, TTarget>(
+            memberName, defaultValue, false, BindingMode.OneWay,
+            null,
+            null,
+            (s, isChanged) =>
+            {
+                if (isChanged)
+                {
+                    changed((THost)s);
+                }
+            });
 
     public static Dispatcher GetDispatcher(
-        this DependencyObject d) =>
-        d.Dispatcher;
+        this IAvaloniaObject _) =>
+        Dispatcher.UIThread;
 
     public static void InvokeAsynchronously(
         this Dispatcher dispatcher, Action action, bool isHigherPriority) =>
-        dispatcher.BeginInvoke(
+        dispatcher.InvokeAsynchronously(
             action,
-            isHigherPriority ? DispatcherPriority.Normal : DispatcherPriority.ApplicationIdle);
+            isHigherPriority);
 }

@@ -8,12 +8,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-namespace SkiaImageView
+namespace SkiaImageView;
+
+public enum StretchDirection
 {
-    public enum StretchDirection
-    {
-        UpOnly,
-        DownOnly,
-        Both
-    }
+    UpOnly,
+    DownOnly,
+    Both
 }
