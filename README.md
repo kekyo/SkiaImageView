@@ -109,6 +109,9 @@ Apache-v2.
 
 ## History
 
+* 1.3.0:
+  * Supported Avalonia platform (>= 0.10.0).
+  * Downgraded Xamarin Forms package version (>= 5.0.0.1874).
 * 1.2.0:
   * Fixed misconfigured bitfield of RGBA on Xamarin Forms.
   * Added ProjectionQuality property for Xamarin Forms (You can adjust final image quality when need to make better performance.)
