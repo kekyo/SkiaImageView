@@ -34,6 +34,15 @@ XAML example:
 </Window>
 ```
 
+```csharp
+public sealed class ViewModel
+{
+    public SKBitmap? PreviewImage { get; set; }
+
+    // ...
+}
+```
+
 Fully sample code is here:
 
 * [SkiaImageView.Wpf.Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Wpf.Sample)
