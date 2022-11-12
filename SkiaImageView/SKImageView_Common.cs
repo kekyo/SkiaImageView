@@ -25,6 +25,11 @@ using Xamarin.Forms;
 using DependencyProperty = Xamarin.Forms.BindableProperty;
 #endif
 
+#if AVALONIA
+using Avalonia;
+using Avalonia.Media;
+#endif
+
 namespace SkiaImageView;
 
 public enum RenderMode
@@ -34,31 +39,16 @@ public enum RenderMode
     Asynchronously,
 }
 
-// Needs only XF.
 public enum ProjectionQuality
 {
     Perfect,
-#if XAMARIN_FORMS
-    High,
-    Middle,
-    Low,
-#endif
+    High,      // Needs only XF.
+    Middle,    // Needs only XF.
+    Low,       // Needs only XF.
 }
 
 public sealed partial class SKImageView
 {
-    public static readonly DependencyProperty StretchProperty =
-        Interops.Register<Stretch, SKImageView>(
-            nameof(Stretch), Stretch.None, (d, o, n) => d.Invalidate(false));
-
-    public static readonly DependencyProperty StretchDirectionProperty =
-        Interops.Register<StretchDirection, SKImageView>(
-            nameof(StretchDirection), StretchDirection.Both, (d, o, n) => d.Invalidate(false));
-
-    public static readonly DependencyProperty RenderModeProperty =
-        Interops.Register<RenderMode, SKImageView>(
-            nameof(RenderMode), RenderMode.AsynchronouslyForFetching, (d, o, n) => d.OnBitmapChanged());
-
     private static readonly Lazy<HttpClient> httpClient =
         new Lazy<HttpClient>(() => new HttpClient());
 
@@ -67,25 +57,25 @@ public sealed partial class SKImageView
 
     public Stretch Stretch
     {
-        get => (Stretch)this.GetValue(StretchProperty);
+        get => (Stretch)this.GetValue(StretchProperty)!;
         set => this.SetValue(StretchProperty, value);
     }
 
     public StretchDirection StretchDirection
     {
-        get => (StretchDirection)this.GetValue(StretchDirectionProperty);
+        get => (StretchDirection)this.GetValue(StretchDirectionProperty)!;
         set => this.SetValue(StretchDirectionProperty, value);
     }
 
     public RenderMode RenderMode
     {
-        get => (RenderMode)this.GetValue(RenderModeProperty);
+        get => (RenderMode)this.GetValue(RenderModeProperty)!;
         set => this.SetValue(RenderModeProperty, value);
     }
 
     public ProjectionQuality ProjectionQuality
     {
-        get => (ProjectionQuality)this.GetValue(ProjectionQualityProperty);
+        get => (ProjectionQuality)this.GetValue(ProjectionQualityProperty)!;
         set => this.SetValue(ProjectionQualityProperty, value);
     }
 
@@ -122,7 +112,7 @@ public sealed partial class SKImageView
                 canvas => canvas.DrawBitmap(bmp, default(SKPoint)));
 
             // Switch to UI thread.
-            this.Dispatcher.InvokeAsynchronously(() =>
+            this.GetDispatcher().InvokeAsynchronously(() =>
             {
                 // Avoid race condition.
                 if (executionCount == this.executionCount)
@@ -145,7 +135,7 @@ public sealed partial class SKImageView
                 canvas => canvas.DrawBitmap(bmp, default(SKPoint)));
 
             // Switch to UI thread.
-            this.Dispatcher.InvokeAsynchronously(() =>
+            this.GetDispatcher().InvokeAsynchronously(() =>
             {
                 // Avoid race condition.
                 if (executionCount == this.executionCount)
@@ -168,7 +158,7 @@ public sealed partial class SKImageView
                 var backingStore = DrawImage(
                     width, height, projectionQuality, action);
 
-                this.Dispatcher.InvokeAsynchronously(() =>
+                this.GetDispatcher().InvokeAsynchronously(() =>
                 {
                     // Avoid race condition.
                     if (executionCount == this.executionCount)
@@ -227,7 +217,7 @@ public sealed partial class SKImageView
         else if (this.Source is string urlString)
         {
             this.UpdateWith(null);
-            this.FetchFromUrl(new Uri(urlString), executionCount);
+            this.FetchFromUrl(new(urlString), executionCount);
         }
         else if (this.Source is Uri url)
         {
@@ -255,7 +245,7 @@ public sealed partial class SKImageView
                 backingStore.Size,
                 this.Stretch,
                 this.StretchDirection);
-            return new Size(
+            return new(
                 backingStore.Size.Width * scaleFactor.Width,
                 backingStore.Size.Height * scaleFactor.Height);
         }

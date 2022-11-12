@@ -8,35 +8,42 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Metadata;
 
 namespace SkiaImageView
 {
-    partial class SKImageView : FrameworkElement
+    partial class SKImageView : Control
     {
-        public static readonly DependencyProperty SourceProperty =
+        public static readonly AvaloniaProperty<object?> SourceProperty =
             Interops.Register<object?, SKImageView>(
                 nameof(Source), null, d => d.OnBitmapChanged());
 
-        public static readonly DependencyProperty StretchProperty =
+        public static readonly AvaloniaProperty<Stretch> StretchProperty =
             Interops.Register<Stretch, SKImageView>(
                 nameof(Stretch), Stretch.None, d => d.Invalidate(false));
 
-        public static readonly DependencyProperty StretchDirectionProperty =
+        public static readonly AvaloniaProperty<StretchDirection> StretchDirectionProperty =
             Interops.Register<StretchDirection, SKImageView>(
                 nameof(StretchDirection), StretchDirection.Both, d => d.Invalidate(false));
 
-        public static readonly DependencyProperty RenderModeProperty =
+        public static readonly AvaloniaProperty<RenderMode> RenderModeProperty =
             Interops.Register<RenderMode, SKImageView>(
                 nameof(RenderMode), RenderMode.AsynchronouslyForFetching, d => d.OnBitmapChanged());
 
-        public static readonly DependencyProperty ProjectionQualityProperty =
+        public static readonly AvaloniaProperty<ProjectionQuality> ProjectionQualityProperty =
             Interops.Register<ProjectionQuality, SKImageView>(
                 nameof(ProjectionQuality),
                 ProjectionQuality.Perfect,
                 _ => { });
+
+        static SKImageView()
+        {
+            AffectsRender<SKImageView>(SourceProperty, StretchProperty, StretchDirectionProperty);
+            AffectsMeasure<SKImageView>(SourceProperty, StretchProperty, StretchDirectionProperty);
+        }
 
         private void Invalidate(bool both)
         {
@@ -47,11 +54,15 @@ namespace SkiaImageView
             base.InvalidateVisual();
         }
 
-        public object Source
+        [Content]
+        public object? Source
         {
             get => this.GetValue(SourceProperty);
             set => this.SetValue(SourceProperty, value);
         }
+
+        private Size RenderSize =>
+            this.Bounds.Size;
 
         private void UpdateWith(BackingStore? backingStore)
         {
@@ -65,10 +76,10 @@ namespace SkiaImageView
         protected override Size ArrangeOverride(Size arrangeSize) =>
             this.InternalMeasureArrangeOverride(arrangeSize);
 
-        protected override void OnRender(DrawingContext drawingContext)
+        public override void Render(DrawingContext drawingContext)
         {
-            base.OnRender(drawingContext);
-        
+            base.Render(drawingContext);
+
             if (this.backingStore is { } backingStore)
             {
                 backingStore.Draw(drawingContext, this.RenderSize);

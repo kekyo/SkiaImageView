@@ -17,13 +17,25 @@ partial class SKImageView : Image
 {
     public static new readonly DependencyProperty SourceProperty =
         Interops.Register<object?, SKImageView>(
-            nameof(Source), null, (d, o, n) => d.OnBitmapChanged());
+            nameof(Source), null, d => d.OnBitmapChanged());
+
+    public static readonly DependencyProperty StretchProperty =
+        Interops.Register<Stretch, SKImageView>(
+            nameof(Stretch), Stretch.None, d => d.Invalidate(false));
+
+    public static readonly DependencyProperty StretchDirectionProperty =
+        Interops.Register<StretchDirection, SKImageView>(
+            nameof(StretchDirection), StretchDirection.Both, d => d.Invalidate(false));
+
+    public static readonly DependencyProperty RenderModeProperty =
+        Interops.Register<RenderMode, SKImageView>(
+            nameof(RenderMode), RenderMode.AsynchronouslyForFetching, d => d.OnBitmapChanged());
 
     public static readonly DependencyProperty ProjectionQualityProperty =
-        Interops.Register<object?, SKImageView>(
+        Interops.Register<ProjectionQuality, SKImageView>(
             nameof(ProjectionQuality),
-            ProjectionQuality.Middle,
-            (_, _, _) => { });
+            ProjectionQuality.Middle,   // Limited on XF
+            _ => { });
 
     public SKImageView() =>
         base.Aspect = Aspect.AspectFill;

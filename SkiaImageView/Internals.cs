@@ -20,6 +20,11 @@ using System.Windows.Media;
 using Xamarin.Forms;
 #endif
 
+#if AVALONIA
+using Avalonia;
+using Avalonia.Media;
+#endif
+
 namespace SkiaImageView;
 
 // Imported from wpf public repository. License under MIT.

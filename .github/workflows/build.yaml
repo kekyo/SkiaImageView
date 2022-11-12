@@ -72,13 +72,15 @@ jobs:
       run: |
         msbuild -p:Configuration=Release SkiaImageView.Wpf\SkiaImageView.Wpf.csproj
         msbuild -p:Configuration=Release SkiaImageView.Xamarin.Forms\SkiaImageView.Xamarin.Forms.csproj
-        
+        msbuild -p:Configuration=Release SkiaImageView.Avalonia\SkiaImageView.Avalonia.csproj
+    
     # run: msbuild -p:Configuration=Release -maxCpuCount SkiaImageView.sln
 
     - name: Build NuGet packages
       run: |
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Wpf\SkiaImageView.Wpf.csproj
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Xamarin.Forms\SkiaImageView.Xamarin.Forms.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Avalonia\SkiaImageView.Avalonia.csproj
 
     #-----------------------------------------------------------------------
     # Test
@@ -95,6 +97,7 @@ jobs:
       run: |
         dotnet nuget push artifacts\SkiaImageView.Wpf.*.nupkg --source ref1
         dotnet nuget push artifacts\SkiaImageView.Xamarin.Forms.*.nupkg --source ref1
+        dotnet nuget push artifacts\SkiaImageView.Avalonia.*.nupkg --source ref1
 
     #-----------------------------------------------------------------------
     # Deploy packages (main)
@@ -104,3 +107,4 @@ jobs:
     #  run: |
     #    dotnet nuget push artifacts\SkiaImageView.Wpf.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\SkiaImageView.Xamarin.Forms.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\SkiaImageView.Avalonia.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
