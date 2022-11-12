@@ -18,8 +18,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 #endif
 
 #if XAMARIN_FORMS
@@ -47,22 +45,8 @@ namespace SkiaImageView
 #endif
     }
 
-    public sealed class SKImageView :
-#if WPF
-        FrameworkElement
-#elif XAMARIN_FORMS
-        Image
-#endif
+    public sealed partial class SKImageView
     {
-#if WPF
-        public static readonly DependencyProperty SourceProperty =
-            Interops.Register<object?, SKImageView>(
-                nameof(Source), null, (d, o, n) => d.OnBitmapChanged());
-#elif XAMARIN_FORMS
-        public static new readonly DependencyProperty SourceProperty =
-            Interops.Register<object?, SKImageView>(
-                nameof(Source), null, (d, o, n) => d.OnBitmapChanged());
-#endif
         public static readonly DependencyProperty StretchProperty =
             Interops.Register<Stretch, SKImageView>(
                 nameof(Stretch), Stretch.None, (d, o, n) => d.Invalidate(false));
@@ -75,52 +59,11 @@ namespace SkiaImageView
             Interops.Register<RenderMode, SKImageView>(
                 nameof(RenderMode), RenderMode.AsynchronouslyForFetching, (d, o, n) => d.OnBitmapChanged());
 
-        public static readonly DependencyProperty ProjectionQualityProperty =
-            Interops.Register<object?, SKImageView>(
-                nameof(ProjectionQuality),
-#if WPF
-                ProjectionQuality.Perfect,
-#else
-                ProjectionQuality.Middle,
-#endif
-                (_, _, _) => { });
-
         private static readonly Lazy<HttpClient> httpClient =
             new Lazy<HttpClient>(() => new HttpClient());
 
         private BackingStore? backingStore;
         private volatile int executionCount;
-
-#if WPF
-        private void Invalidate(bool both)
-        {
-            if (both)
-            {
-                base.InvalidateMeasure();
-            }
-            base.InvalidateVisual();
-        }
-
-        public object Source
-        {
-            get => this.GetValue(SourceProperty);
-            set => this.SetValue(SourceProperty, value);
-        }
-#elif XAMARIN_FORMS
-        public SKImageView()
-        {
-            base.Aspect = Aspect.AspectFill;
-        }
-
-        private void Invalidate(bool both) =>
-            base.InvalidateMeasure();
-
-        public new object Source
-        {
-            get => this.GetValue(SourceProperty);
-            set => this.SetValue(SourceProperty, value);
-        }
-#endif
 
         public Stretch Stretch
         {
@@ -145,23 +88,6 @@ namespace SkiaImageView
             get => (ProjectionQuality)this.GetValue(ProjectionQualityProperty);
             set => this.SetValue(ProjectionQualityProperty, value);
         }
-
-#if WPF
-        private void UpdateWith(BackingStore? backingStore)
-        {
-            this.backingStore = backingStore;
-            this.Invalidate(true);
-        }
-#elif XAMARIN_FORMS
-        private Size RenderSize =>
-            new Size(base.Width, base.Height);
-
-        private void UpdateWith(BackingStore? backingStore)
-        {
-            this.backingStore = backingStore;
-            base.Source = this.backingStore?.GetImageSource();
-        }
-#endif
 
         private static BackingStore DrawImage(
             int width, int height, ProjectionQuality projectionQuality, Action<SKCanvas> action)
@@ -338,26 +264,5 @@ namespace SkiaImageView
                 return default;
             }
         }
-
-#if WPF
-        protected override Size MeasureOverride(Size constraint) =>
-            this.InternalMeasureArrangeOverride(constraint);
-
-        protected override Size ArrangeOverride(Size arrangeSize) =>
-            this.InternalMeasureArrangeOverride(arrangeSize);
-
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            base.OnRender(drawingContext);
-        
-            if (this.backingStore is { } backingStore)
-            {
-                backingStore.Draw(drawingContext, this.RenderSize);
-            }
-        }
-#elif XAMARIN_FORMS
-        protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint) =>
-            new SizeRequest(InternalMeasureArrangeOverride(new Size(widthConstraint, heightConstraint)));
-#endif
     }
 }
