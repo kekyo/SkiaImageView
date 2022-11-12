@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.18" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    <PackageReference Include="Epoxy.Avalonia" Version="*" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SkiaImageView.Avalonia\SkiaImageView.Avalonia.csproj" />
+    <ProjectReference Include="..\..\SkiaImageView.Sample.Core\SkiaImageView.Sample.Core.csproj" />
+  </ItemGroup>
+
+</Project>
