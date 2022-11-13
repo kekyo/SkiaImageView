@@ -20,6 +20,11 @@ using System.Windows.Media;
 using Xamarin.Forms;
 #endif
 
+#if MAUI
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
+#endif
+
 #if AVALONIA
 using Avalonia;
 using Avalonia.Media;

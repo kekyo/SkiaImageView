@@ -22,7 +22,11 @@ using System.Windows.Media;
 
 #if XAMARIN_FORMS
 using Xamarin.Forms;
-using DependencyProperty = Xamarin.Forms.BindableProperty;
+#endif
+
+#if MAUI
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 #endif
 
 #if AVALONIA
@@ -42,9 +46,9 @@ public enum RenderMode
 public enum ProjectionQuality
 {
     Perfect,
-    High,      // Needs only XF.
-    Middle,    // Needs only XF.
-    Low,       // Needs only XF.
+    High,      // Needs only XF/Maui.
+    Middle,    // Needs only XF/Maui.
+    Low,       // Needs only XF/Maui.
 }
 
 public sealed partial class SKImageView

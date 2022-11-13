@@ -8,18 +8,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Epoxy;
-using SkiaSharp;
+namespace SkiaImageView;
 
-namespace SkiaImageView.Sample.ViewModels
+public enum StretchDirection
 {
-    [ViewModel]
-    public sealed class ItemViewModel
-    {
-        public string? Title { get; set; }
-
-        public SKBitmap? Image { get; set; }
-
-        public int Score { get; set; }
-    }
+    UpOnly,
+    DownOnly,
+    Both
 }

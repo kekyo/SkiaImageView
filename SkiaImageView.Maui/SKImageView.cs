@@ -8,7 +8,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Xamarin.Forms;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 
 namespace SkiaImageView;
 
@@ -20,7 +22,7 @@ partial class SKImageView : Image
 
     public static readonly BindableProperty StretchProperty =
         Interops.Register<Stretch, SKImageView>(
-            nameof(Stretch), Stretch.None, d => d.Invalidate(false));
+            nameof(Stretch), Microsoft.Maui.Controls.Stretch.None, d => d.Invalidate(false));
 
     public static readonly BindableProperty StretchDirectionProperty =
         Interops.Register<StretchDirection, SKImageView>(
@@ -37,7 +39,7 @@ partial class SKImageView : Image
             _ => { });
 
     public SKImageView() =>
-        base.Aspect = Aspect.AspectFill;
+        base.Aspect = Microsoft.Maui.Aspect.AspectFill;
 
     private void Invalidate(bool both) =>
         base.InvalidateMeasure();
