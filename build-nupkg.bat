@@ -15,8 +15,10 @@ rem git clean -xfd
 
 dotnet build -p:Configuration=Release -p:Platform=AnyCPU SkiaImageView.Wpf\SkiaImageView.Wpf.csproj
 dotnet build -p:Configuration=Release -p:Platform=AnyCPU SkiaImageView.Xamarin.Forms\SkiaImageView.Xamarin.Forms.csproj
+dotnet build -p:Configuration=Release -p:Platform=AnyCPU SkiaImageView.Maui\SkiaImageView.Maui.csproj
 dotnet build -p:Configuration=Release -p:Platform=AnyCPU SkiaImageView.Avalonia\SkiaImageView.Avalonia.csproj
 
 dotnet pack -p:Configuration=Release -p:Platform=AnyCPU -o artifacts SkiaImageView.Wpf\SkiaImageView.Wpf.csproj
 dotnet pack -p:Configuration=Release -p:Platform=AnyCPU -o artifacts SkiaImageView.Xamarin.Forms\SkiaImageView.Xamarin.Forms.csproj
+dotnet pack -p:Configuration=Release -p:Platform=AnyCPU -o artifacts SkiaImageView.Maui\SkiaImageView.Maui.csproj
 dotnet pack -p:Configuration=Release -p:Platform=AnyCPU -o artifacts SkiaImageView.Avalonia\SkiaImageView.Avalonia.csproj

@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// SkiaImageView.Wpf - Easy way showing SkiaSharp-based image objects onto WPF applications.
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
 //
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
@@ -8,15 +8,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-namespace SkiaImageView.Sample
-{
-    public partial class MainPage
-    {
-        public MainPage()
-        {
-            this.InitializeComponent();
+using Microsoft.Maui.Controls;
 
-            LoadApplication(new App());
-        }
-    }
+namespace SkiaImageView.Sample.Views;
+
+public partial class MainPage : ContentPage
+{
+    public MainPage() =>
+        InitializeComponent();
 }

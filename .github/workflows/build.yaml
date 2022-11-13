@@ -32,6 +32,10 @@ jobs:
     #-----------------------------------------------------------------------
     # Setup environments
 
+    - name: Setup .NET 2.2
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.2.*
     - name: Setup .NET 3.1
       uses: actions/setup-dotnet@v1
       with:
@@ -63,6 +67,12 @@ jobs:
     #    java-version: '11'
 
     #-----------------------------------------------------------------------
+    # Update Maui workload
+
+    - name: Update Maui workload
+      run: dotnet workload install maui
+
+    #-----------------------------------------------------------------------
     # Build
 
     - name: NuGet restore
@@ -72,14 +82,16 @@ jobs:
       run: |
         msbuild -p:Configuration=Release SkiaImageView.Wpf\SkiaImageView.Wpf.csproj
         msbuild -p:Configuration=Release SkiaImageView.Xamarin.Forms\SkiaImageView.Xamarin.Forms.csproj
+        msbuild -p:Configuration=Release SkiaImageView.Maui\SkiaImageView.Maui.csproj
         msbuild -p:Configuration=Release SkiaImageView.Avalonia\SkiaImageView.Avalonia.csproj
-    
+  
     # run: msbuild -p:Configuration=Release -maxCpuCount SkiaImageView.sln
 
     - name: Build NuGet packages
       run: |
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Wpf\SkiaImageView.Wpf.csproj
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Xamarin.Forms\SkiaImageView.Xamarin.Forms.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Maui\SkiaImageView.Maui.csproj
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Avalonia\SkiaImageView.Avalonia.csproj
 
     #-----------------------------------------------------------------------
@@ -97,6 +109,7 @@ jobs:
       run: |
         dotnet nuget push artifacts\SkiaImageView.Wpf.*.nupkg --source ref1
         dotnet nuget push artifacts\SkiaImageView.Xamarin.Forms.*.nupkg --source ref1
+        dotnet nuget push artifacts\SkiaImageView.Maui.*.nupkg --source ref1
         dotnet nuget push artifacts\SkiaImageView.Avalonia.*.nupkg --source ref1
 
     #-----------------------------------------------------------------------
@@ -107,4 +120,5 @@ jobs:
     #  run: |
     #    dotnet nuget push artifacts\SkiaImageView.Wpf.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\SkiaImageView.Xamarin.Forms.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\SkiaImageView.Maui.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\SkiaImageView.Avalonia.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}

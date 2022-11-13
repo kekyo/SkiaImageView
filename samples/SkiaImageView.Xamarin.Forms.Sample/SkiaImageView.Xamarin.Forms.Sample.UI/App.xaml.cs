@@ -11,27 +11,26 @@
 using SkiaImageView.Sample.Views;
 using Xamarin.Forms;
 
-namespace SkiaImageView.Sample
+namespace SkiaImageView.Sample;
+
+public sealed partial class App : Application
 {
-    public sealed partial class App : Application
+    public App()
     {
-        public App()
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            MainPage = new MainPage();
-        }
+        MainPage = new MainPage();
+    }
 
-        protected override void OnStart()
-        {
-        }
+    protected override void OnStart()
+    {
+    }
 
-        protected override void OnSleep()
-        {
-        }
+    protected override void OnSleep()
+    {
+    }
 
-        protected override void OnResume()
-        {
-        }
+    protected override void OnResume()
+    {
     }
 }

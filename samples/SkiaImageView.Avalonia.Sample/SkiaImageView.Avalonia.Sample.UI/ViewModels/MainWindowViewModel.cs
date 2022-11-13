@@ -1,8 +1,10 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy template source code.
-// Write your own copyright and note.
-// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
+//
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
+//
+// Licensed under Apache-v2: https://opensource.org/licenses/Apache-2.0
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -12,62 +14,60 @@ using SkiaImageView.Sample.Models;
 using SkiaSharp;
 using System;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Threading.Tasks;
 
-namespace SkiaImageView.Sample.ViewModels
+namespace SkiaImageView.Sample.ViewModels;
+
+[ViewModel]
+public sealed class MainWindowViewModel
 {
-    [ViewModel]
-    public sealed class MainWindowViewModel
+    public MainWindowViewModel()
     {
-        public MainWindowViewModel()
+        this.Items = new ObservableCollection<ItemViewModel>();
+
+        // A handler for window opened
+        this.Ready = Command.Factory.CreateSync(() =>
         {
-            this.Items = new ObservableCollection<ItemViewModel>();
+            this.IsEnabled = true;
+        });
 
-            // A handler for window opened
-            this.Ready = Command.Factory.CreateSync(() =>
+        // A handler for fetch button
+        this.Fetch = CommandFactory.Create(async () =>
+        {
+            this.IsEnabled = false;
+
+            try
             {
-                this.IsEnabled = true;
-            });
+                // Uses Reddit API
+                var reddits = await Reddit.FetchNewPostsAsync("r/aww");
 
-            // A handler for fetch button
-            this.Fetch = CommandFactory.Create(async () =>
-            {
-                this.IsEnabled = false;
+                this.Items.Clear();
 
-                try
+                static async ValueTask<SKBitmap?> FetchImageAsync(Uri url) =>
+                    SKBitmap.Decode(await Reddit.FetchImageAsync(url));
+
+                foreach (var reddit in reddits)
                 {
-                    // Uses Reddit API
-                    var reddits = await Reddit.FetchNewPostsAsync("r/aww");
-
-                    this.Items.Clear();
-
-                    static async ValueTask<SKBitmap?> FetchImageAsync(Uri url) =>
-                        SKBitmap.Decode(await Reddit.FetchImageAsync(url));
-
-                    foreach (var reddit in reddits)
+                    this.Items.Add(new ItemViewModel
                     {
-                        this.Items.Add(new ItemViewModel
-                        {
-                            Title = reddit.Title,
-                            Score = reddit.Score,
-                            Image = await FetchImageAsync(reddit.Url)
-                        });
-                    }
+                        Title = reddit.Title,
+                        Score = reddit.Score,
+                        Image = await FetchImageAsync(reddit.Url)
+                    });
                 }
-                finally
-                {
-                    IsEnabled = true;
-                }
-            });
-        }
-
-        public Command? Ready { get; private set; }
-
-        public bool IsEnabled { get; private set; }
-
-        public ObservableCollection<ItemViewModel>? Items { get; private set; }
-
-        public Command? Fetch { get; private set; }
+            }
+            finally
+            {
+                IsEnabled = true;
+            }
+        });
     }
+
+    public Command? Ready { get; private set; }
+
+    public bool IsEnabled { get; private set; }
+
+    public ObservableCollection<ItemViewModel>? Items { get; private set; }
+
+    public Command? Fetch { get; private set; }
 }

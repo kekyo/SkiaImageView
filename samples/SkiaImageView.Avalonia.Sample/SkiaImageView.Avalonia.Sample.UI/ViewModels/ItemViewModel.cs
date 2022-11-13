@@ -1,23 +1,24 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy template source code.
-// Write your own copyright and note.
-// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
+//
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
+//
+// Licensed under Apache-v2: https://opensource.org/licenses/Apache-2.0
 //
 ////////////////////////////////////////////////////////////////////////////
 
 using Epoxy;
 using SkiaSharp;
 
-namespace SkiaImageView.Sample.ViewModels
+namespace SkiaImageView.Sample.ViewModels;
+
+[ViewModel]
+public sealed class ItemViewModel
 {
-    [ViewModel]
-    public sealed class ItemViewModel
-    {
-        public string? Title { get; set; }
+    public string? Title { get; set; }
 
-        public SKBitmap? Image { get; set; }
+    public SKBitmap? Image { get; set; }
 
-        public int Score { get; set; }
-    }
+    public int Score { get; set; }
 }

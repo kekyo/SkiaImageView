@@ -10,11 +10,10 @@
 
 using Xamarin.Forms;
 
-namespace SkiaImageView.Sample.Views
+namespace SkiaImageView.Sample.Views;
+
+public sealed partial class MainPage : ContentPage
 {
-    public sealed partial class MainPage : ContentPage
-    {
-        public MainPage() =>
-            InitializeComponent();
-    }
+    public MainPage() =>
+        InitializeComponent();
 }

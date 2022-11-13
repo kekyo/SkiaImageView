@@ -1,28 +1,29 @@
 ////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy template source code.
-// Write your own copyright and note.
-// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
+//
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
+//
+// Licensed under Apache-v2: https://opensource.org/licenses/Apache-2.0
 //
 ////////////////////////////////////////////////////////////////////////////
 
 using Avalonia;
 
-namespace SkiaImageView.Sample
-{
-    public static class Program
-    {
-        // Initialization code. Don't use any Avalonia, third-party APIs or any
-        // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-        // yet and stuff might break.
-        public static void Main(string[] args) =>
-            BuildAvaloniaApp().
-            StartWithClassicDesktopLifetime(args);
+namespace SkiaImageView.Sample;
 
-        // Avalonia configuration, don't remove; also used by visual designer.
-        public static AppBuilder BuildAvaloniaApp() =>
-            AppBuilder.Configure<App>().
-            UsePlatformDetect().
-            LogToTrace();
-    }
+public static class Program
+{
+    // Initialization code. Don't use any Avalonia, third-party APIs or any
+    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+    // yet and stuff might break.
+    public static void Main(string[] args) =>
+        BuildAvaloniaApp().
+        StartWithClassicDesktopLifetime(args);
+
+    // Avalonia configuration, don't remove; also used by visual designer.
+    public static AppBuilder BuildAvaloniaApp() =>
+        AppBuilder.Configure<App>().
+        UsePlatformDetect().
+        LogToTrace();
 }

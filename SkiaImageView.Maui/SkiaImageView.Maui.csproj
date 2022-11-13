@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    <UseMaui>true</UseMaui>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
+    <AssemblyName>SkiaImageView</AssemblyName>
+    <AssemblyTitle>SkiaImageView.Maui</AssemblyTitle>
+    <PackageId>SkiaImageView.Maui</PackageId>
+    <PackageTags>skiasharp;maui;imaging</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="2.88.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Images\SkiaImageView.100.png" Pack="true" PackagePath="" />
+    <Compile Include="..\SkiaImageView\**\*.cs" />
+  </ItemGroup>
+
+</Project>

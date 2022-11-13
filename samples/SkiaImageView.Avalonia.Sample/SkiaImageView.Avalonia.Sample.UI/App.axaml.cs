@@ -1,8 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy template source code.
-// Write your own copyright and note.
-// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
+//
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
+//
+// Licensed under Apache-v2: https://opensource.org/licenses/Apache-2.0
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -12,21 +14,20 @@ using Avalonia.Markup.Xaml;
 
 using SkiaImageView.Sample.Views;
 
-namespace SkiaImageView.Sample
+namespace SkiaImageView.Sample;
+
+public sealed class App : Application
 {
-    public sealed class App : Application
+    public override void Initialize() =>
+        AvaloniaXamlLoader.Load(this);
+
+    public override void OnFrameworkInitializationCompleted()
     {
-        public override void Initialize() =>
-            AvaloniaXamlLoader.Load(this);
-
-        public override void OnFrameworkInitializationCompleted()
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                desktop.MainWindow = new MainWindow();
-            }
-
-            base.OnFrameworkInitializationCompleted();
+            desktop.MainWindow = new MainWindow();
         }
+
+        base.OnFrameworkInitializationCompleted();
     }
 }
