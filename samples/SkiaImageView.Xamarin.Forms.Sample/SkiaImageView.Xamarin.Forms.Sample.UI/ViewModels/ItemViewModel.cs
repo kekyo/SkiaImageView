@@ -11,15 +11,14 @@
 using Epoxy;
 using Xamarin.Forms;
 
-namespace SkiaImageView.Sample.ViewModels
+namespace SkiaImageView.Sample.ViewModels;
+
+[ViewModel]
+public sealed class ItemViewModel
 {
-    [ViewModel]
-    public sealed class ItemViewModel
-    {
-        public string? Title { get; set; }
+    public string? Title { get; set; }
 
-        public object? Image { get; set; }
+    public object? Image { get; set; }
 
-        public int Score { get; set; }
-    }
+    public int Score { get; set; }
 }

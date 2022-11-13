@@ -28,9 +28,9 @@ namespace SkiaImageView
             int width, int height, ProjectionQuality projectionQuality)
         {
             this.projectionQuality = projectionQuality;
-            this.imageInfo = new SKImageInfo(
+            this.imageInfo = new(
                 width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-            this.bitmap = new SKBitmap(
+            this.bitmap = new(
                 imageInfo.Width, imageInfo.Height, SKColorType.Rgba8888, SKAlphaType.Premul);
         }
 
@@ -38,7 +38,7 @@ namespace SkiaImageView
             this.imageSource = ImageSource.FromUri(url);
 
         public Size Size =>
-            new Size(this.imageInfo.Width, this.imageInfo.Height);
+            new(this.imageInfo.Width, this.imageInfo.Height);
 
         public void Finish()
         {

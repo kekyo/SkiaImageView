@@ -14,67 +14,64 @@ using SkiaImageView.Sample.Models;
 using SkiaSharp;
 using System;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Xamarin.Forms;
+
 // Conflicted between Xamarin.Forms.Command and Epoxy.Command.
 using Command = Epoxy.Command;
 
-namespace SkiaImageView.Sample.ViewModels
+namespace SkiaImageView.Sample.ViewModels;
+
+[ViewModel]
+public sealed class MainContentPageViewModel
 {
-    [ViewModel]
-    public sealed class MainContentPageViewModel
+    public MainContentPageViewModel()
     {
-        public MainContentPageViewModel()
+        this.Items = new ObservableCollection<ItemViewModel>();
+
+        // A handler for page appearing
+        this.Ready = Command.Factory.CreateSync(() =>
         {
-            this.Items = new ObservableCollection<ItemViewModel>();
+            this.IsEnabled = true;
+        });
 
-            // A handler for page appearing
-            this.Ready = Command.Factory.CreateSync(() =>
+        // A handler for fetch button
+        this.Fetch = CommandFactory.Create(async () =>
+        {
+            this.IsEnabled = false;
+
+            try
             {
-                this.IsEnabled = true;
-            });
+                // Uses Reddit API
+                var reddits = await Reddit.FetchNewPostsAsync("r/aww");
 
-            // A handler for fetch button
-            this.Fetch = CommandFactory.Create(async () =>
-            {
-                this.IsEnabled = false;
+                this.Items.Clear();
 
-                try
+                static async ValueTask<SKBitmap?> FetchImageAsync(Uri url) =>
+                    SKBitmap.Decode(await Reddit.FetchImageAsync(url));
+
+                foreach (var reddit in reddits)
                 {
-                    // Uses Reddit API
-                    var reddits = await Reddit.FetchNewPostsAsync("r/aww");
-
-                    this.Items.Clear();
-
-                    static async ValueTask<SKBitmap?> FetchImageAsync(Uri url) =>
-                        SKBitmap.Decode(await Reddit.FetchImageAsync(url));
-
-                    foreach (var reddit in reddits)
+                    this.Items.Add(new ItemViewModel
                     {
-                        this.Items.Add(new ItemViewModel
-                        {
-                            Title = reddit.Title,
-                            Score = reddit.Score,
-                            Image = await FetchImageAsync(reddit.Url),
-                            //Image = reddit.Url,
-                        });
-                    }
+                        Title = reddit.Title,
+                        Score = reddit.Score,
+                        Image = await FetchImageAsync(reddit.Url),
+                        //Image = reddit.Url,
+                    });
                 }
-                finally
-                {
-                    IsEnabled = true;
-                }
-            });
-        }
-
-        public Command? Ready { get; private set; }
-
-        public bool IsEnabled { get; private set; }
-
-        public ObservableCollection<ItemViewModel>? Items { get; private set; }
-
-        public Epoxy.Command? Fetch { get; private set; }
+            }
+            finally
+            {
+                IsEnabled = true;
+            }
+        });
     }
+
+    public Command? Ready { get; private set; }
+
+    public bool IsEnabled { get; private set; }
+
+    public ObservableCollection<ItemViewModel>? Items { get; private set; }
+
+    public Epoxy.Command? Fetch { get; private set; }
 }

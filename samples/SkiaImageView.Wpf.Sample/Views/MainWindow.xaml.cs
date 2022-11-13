@@ -10,11 +10,10 @@
 
 using System.Windows;
 
-namespace SkiaImageView.Sample.Views
+namespace SkiaImageView.Sample.Views;
+
+public sealed partial class MainWindow : Window
 {
-    public sealed partial class MainWindow : Window
-    {
-        public MainWindow() =>
-            InitializeComponent();
-    }
+    public MainWindow() =>
+        InitializeComponent();
 }

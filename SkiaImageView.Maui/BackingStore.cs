@@ -32,7 +32,7 @@ internal sealed class BackingStore
         this.imageInfo = new(
             width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
         this.bitmap = new(
-            imageInfo.Width, imageInfo.Height, SKColorType.Rgba8888, SKAlphaType.Premul);
+            imageInfo.Width, imageInfo.Height, SKColorType.Bgra8888, SKAlphaType.Premul);
     }
 
     public BackingStore(Uri url) =>
@@ -43,7 +43,7 @@ internal sealed class BackingStore
 
     public void Finish()
     {
-        // Xamarin Forms is in essence, supposed to be used on smartphones and tablets,
+        // Maui is in essence, supposed to be used on smartphones and tablets,
         // so a Middle quality of 90 does not seem too out of place.
         // The amount of data can be significantly reduced.
         var (format, quality) = this.projectionQuality switch

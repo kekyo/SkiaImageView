@@ -9,7 +9,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using SkiaSharp;
-using System;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -24,9 +23,9 @@ internal sealed class BackingStore
     public BackingStore(
         int width, int height, ProjectionQuality projectionQuality)
     {
-        this.imageInfo = new SKImageInfo(
+        this.imageInfo = new(
             width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-        this.writableBitmap = new WriteableBitmap(
+        this.writableBitmap = new(
             imageInfo.Width, imageInfo.Height, 96.0, 96.0, PixelFormats.Pbgra32, null);
         this.writableBitmap.Lock();
     }
@@ -44,5 +43,5 @@ internal sealed class BackingStore
         SKSurface.Create(this.imageInfo, this.writableBitmap.BackBuffer, this.writableBitmap.BackBufferStride);
 
     public void Draw(DrawingContext drawingContext, Size renderSize) =>
-        drawingContext.DrawImage(this.writableBitmap, new Rect(new Point(), renderSize));
+        drawingContext.DrawImage(this.writableBitmap, new(new(), renderSize));
 }

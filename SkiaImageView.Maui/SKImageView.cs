@@ -35,7 +35,7 @@ partial class SKImageView : Image
     public static readonly BindableProperty ProjectionQualityProperty =
         Interops.Register<ProjectionQuality, SKImageView>(
             nameof(ProjectionQuality),
-            ProjectionQuality.Middle,   // Limited on XF
+            ProjectionQuality.Middle,   // Limited on Maui
             _ => { });
 
     public SKImageView() =>
