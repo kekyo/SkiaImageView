@@ -20,13 +20,22 @@ namespace SkiaImageView;
 internal static class Interops
 {
     public static AvaloniaProperty<TTarget> Register<TTarget, THost>(
-        string memberName, TTarget defaultValue, Action<THost> changed)
+        string memberName, TTarget defaultValue, Action<THost, TTarget> changed)
         where THost : AvaloniaObject =>
         AvaloniaProperty.Register<THost, TTarget>(
             memberName, defaultValue, false, BindingMode.OneWay,
             null,
-            (sender, newValue) => { changed((THost)sender); return newValue; },
+            (sender, newValue) => { changed((THost)sender, newValue); return newValue; },
             false);
+
+    //public static AvaloniaProperty<TTarget> Register<TTarget, THost>(
+    //    string memberName, TTarget defaultValue, Action<THost> changed)
+    //    where THost : AvaloniaObject =>
+    //    AvaloniaProperty.Register<THost, TTarget>(
+    //        memberName, defaultValue, false, BindingMode.OneWay,
+    //        null,
+    //        (sender, newValue) => { changed((THost)sender); return newValue; },
+    //        false);
 
     public static Dispatcher GetDispatcher(
         this AvaloniaObject _) =>

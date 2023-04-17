@@ -19,25 +19,25 @@ partial class SKImageView : Control
 {
     public static readonly AvaloniaProperty<object?> SourceProperty =
         Interops.Register<object?, SKImageView>(
-            nameof(Source), null, d => d.OnBitmapChanged());
+            nameof(Source), null, (d,e) => d.OnBitmapChanged(e));
 
     public static readonly AvaloniaProperty<Stretch> StretchProperty =
         Interops.Register<Stretch, SKImageView>(
-            nameof(Stretch), Stretch.None, d => d.Invalidate(false));
+            nameof(Stretch), Stretch.None, (d, e) => d.Invalidate(false));
 
     public static readonly AvaloniaProperty<StretchDirection> StretchDirectionProperty =
         Interops.Register<StretchDirection, SKImageView>(
-            nameof(StretchDirection), StretchDirection.Both, d => d.Invalidate(false));
+            nameof(StretchDirection), StretchDirection.Both, (d, e) => d.Invalidate(false));
 
     public static readonly AvaloniaProperty<RenderMode> RenderModeProperty =
         Interops.Register<RenderMode, SKImageView>(
-            nameof(RenderMode), RenderMode.AsynchronouslyForFetching, d => d.OnBitmapChanged());
+            nameof(RenderMode), RenderMode.AsynchronouslyForFetching, (d, e) => d.OnBitmapChanged(d.Source));
 
     public static readonly AvaloniaProperty<ProjectionQuality> ProjectionQualityProperty =
         Interops.Register<ProjectionQuality, SKImageView>(
             nameof(ProjectionQuality),
             ProjectionQuality.Perfect,
-            _ => { });
+            (d, e) => { });
 
     static SKImageView()
     {
