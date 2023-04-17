@@ -14,7 +14,7 @@ using Avalonia.Markup.Xaml;
 
 namespace SkiaImageView.Sample.Views;
 
-public sealed class MainWindow : Window
+public sealed partial class MainWindow : Window
 {
     public MainWindow()
     {

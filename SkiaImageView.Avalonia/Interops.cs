@@ -21,21 +21,15 @@ internal static class Interops
 {
     public static AvaloniaProperty<TTarget> Register<TTarget, THost>(
         string memberName, TTarget defaultValue, Action<THost> changed)
-        where THost : IAvaloniaObject =>
+        where THost : AvaloniaObject =>
         AvaloniaProperty.Register<THost, TTarget>(
             memberName, defaultValue, false, BindingMode.OneWay,
             null,
-            null,
-            (s, isChanged) =>
-            {
-                if (isChanged)
-                {
-                    changed((THost)s);
-                }
-            });
+            (sender, newValue) => { changed((THost)sender); return newValue; },
+            false);
 
     public static Dispatcher GetDispatcher(
-        this IAvaloniaObject _) =>
+        this AvaloniaObject _) =>
         Dispatcher.UIThread;
 
     public static void InvokeAsynchronously(

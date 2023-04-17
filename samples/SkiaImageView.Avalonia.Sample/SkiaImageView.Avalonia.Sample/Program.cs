@@ -9,6 +9,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Avalonia;
+using Avalonia.ReactiveUI;
 
 namespace SkiaImageView.Sample;
 
@@ -25,5 +26,6 @@ public static class Program
     public static AppBuilder BuildAvaloniaApp() =>
         AppBuilder.Configure<App>().
         UsePlatformDetect().
-        LogToTrace();
+        LogToTrace().
+        UseReactiveUI();
 }

@@ -1,23 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-    
-  <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.18" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.18" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-    <PackageReference Include="Epoxy.Avalonia" Version="*" />
-  </ItemGroup>
-    
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\SkiaImageView.Avalonia\SkiaImageView.Avalonia.csproj" />
-    <ProjectReference Include="..\..\SkiaImageView.Sample.Core\SkiaImageView.Sample.Core.csproj" />
-  </ItemGroup>
+
+    <PropertyGroup>
+        <TargetFrameworks>net6.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <DebugType>portable</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview6" />
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview6" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview6" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview6" />
+        <PackageReference Include="EventBinder.Avalonia" Version="2.5.2-11.0.0-preview6" />
+        <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+        <PackageReference Include="ReactiveUI.Fody" Version="18.4.26" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\SkiaImageView.Avalonia\SkiaImageView.Avalonia.csproj" />
+        <ProjectReference Include="..\..\SkiaImageView.Sample.Core\SkiaImageView.Sample.Core.csproj" />
+    </ItemGroup>
 
 </Project>
