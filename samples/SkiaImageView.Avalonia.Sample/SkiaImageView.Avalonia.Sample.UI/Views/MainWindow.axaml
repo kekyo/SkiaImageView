@@ -34,7 +34,7 @@
         </Button>
         <Grid>
             <ListBox
-                Items="{Binding Items}"
+                ItemsSource="{Binding Items}"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <ListBox.ItemTemplate>
