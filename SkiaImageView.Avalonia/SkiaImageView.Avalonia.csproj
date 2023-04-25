@@ -7,7 +7,7 @@
     <AssemblyTitle>SkiaImageView.Avalonia</AssemblyTitle>
     <PackageId>SkiaImageView.Avalonia</PackageId>
     <PackageTags>skiasharp;avalonia;imaging;control</PackageTags>
-    <Version>11.0.0-preview6</Version>
+    <Version>11.0.0-preview7</Version>
   </PropertyGroup>
 
   <ItemGroup>
