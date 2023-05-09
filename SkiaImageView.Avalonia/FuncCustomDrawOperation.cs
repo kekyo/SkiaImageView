@@ -26,9 +26,12 @@ internal class FuncCustomDrawOperation : ICustomDrawOperation
 
     public SKRect SKRect { get; }
 
-    public bool HitTest(Point p) => true;
+    public bool HitTest(Point p) => false;
 
-    public bool Equals(ICustomDrawOperation? other) => false;
+    public bool Equals(ICustomDrawOperation? other)
+    {
+       return  object.ReferenceEquals(this, other);
+    }
 
     public void Render(IDrawingContextImpl context)
     {
