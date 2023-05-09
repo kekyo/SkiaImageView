@@ -17,12 +17,6 @@
 
   <ItemGroup>
     <None Include="..\Images\SkiaImageView.100.png" Pack="true" PackagePath="" />
-    <Compile Include="..\SkiaImageView\**\*.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="..\SkiaImageView\Internals.cs" />
-    <Compile Remove="..\SkiaImageView\SKImageView_Common.cs" />
   </ItemGroup>
 
 </Project>

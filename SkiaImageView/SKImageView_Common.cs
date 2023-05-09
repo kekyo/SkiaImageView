@@ -181,57 +181,57 @@ public sealed partial class SKImageView
         }
     }
 
-    private void OnBitmapChanged(object? source)
+    private void OnBitmapChanged()
     {
         var executionCount = Interlocked.Increment(ref this.executionCount);
 
-        if (source is SKBitmap bitmap)
+        if (this.Source is SKBitmap bitmap)
         {
             this.DrawImageAndSet(
                 bitmap.Width, bitmap.Height, executionCount,
                 canvas => canvas.DrawBitmap(bitmap, default(SKPoint)));
         }
-        else if (source is SKImage image)
+        else if (this.Source is SKImage image)
         {
             this.DrawImageAndSet(
                 image.Width, image.Height, executionCount,
                 canvas => canvas.DrawImage(image, default(SKPoint)));
         }
-        else if (source is SKPicture picture)
+        else if (this.Source is SKPicture picture)
         {
             var renderSize = this.RenderSize;
             this.DrawImageAndSet(
                 (int)renderSize.Width, (int)renderSize.Height, executionCount,
                 canvas => canvas.DrawPicture(picture, default(SKPoint)));
         }
-        else if (source is SKDrawable drawable)
+        else if (this.Source is SKDrawable drawable)
         {
             var renderSize = this.RenderSize;
             this.DrawImageAndSet(
                 (int)renderSize.Width, (int)renderSize.Height, executionCount,
                 canvas => canvas.DrawDrawable(drawable, default(SKPoint)));
         }
-        else if (source is SKSurface surface)
+        else if (this.Source is SKSurface surface)
         {
             var renderSize = this.RenderSize;
             this.DrawImageAndSet(
                 (int)renderSize.Width, (int)renderSize.Height, executionCount,
                 canvas => canvas.DrawSurface(surface, default(SKPoint)));
         }
-        else if (source is string urlString)
+        else if (this.Source is string urlString)
         {
             this.UpdateWith(null);
             this.FetchFromUrl(new(urlString), executionCount);
         }
-        else if (source is Uri url)
+        else if (this.Source is Uri url)
         {
             this.UpdateWith(null);
             this.FetchFromUrl(url, executionCount);
         }
-        else if (source != null)
+        else if (this.Source != null)
         {
             Trace.WriteLine(
-                $"SKImageView: Unknown image type, ignored: {source.GetType().FullName}");
+                $"SKImageView: Unknown image type, ignored: {this.Source.GetType().FullName}");
             this.UpdateWith(null);
         }
         else
