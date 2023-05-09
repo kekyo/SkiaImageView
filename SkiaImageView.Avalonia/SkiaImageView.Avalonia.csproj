@@ -7,17 +7,23 @@
     <AssemblyTitle>SkiaImageView.Avalonia</AssemblyTitle>
     <PackageId>SkiaImageView.Avalonia</PackageId>
     <PackageTags>skiasharp;avalonia;imaging;control</PackageTags>
-    <Version>11.0.0-preview7</Version>
+    <Version>11.0.1-preview6</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.0-preview7" />
+    <PackageReference Include="Avalonia" Version="11.0.0-preview6" />
+    <PackageReference Include="Avalonia.Skia" Version="11.0.0-preview6" />
     <PackageReference Include="SkiaSharp" Version="2.88.3" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\Images\SkiaImageView.100.png" Pack="true" PackagePath="" />
     <Compile Include="..\SkiaImageView\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="..\SkiaImageView\Internals.cs" />
+    <Compile Remove="..\SkiaImageView\SKImageView_Common.cs" />
   </ItemGroup>
 
 </Project>
