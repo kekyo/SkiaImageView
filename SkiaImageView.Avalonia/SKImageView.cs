@@ -64,7 +64,7 @@ public partial class SKImageView : Control
     {
         if (Source is { } source)
         {
-            Size sourceSize = default;
+            Size sourceSize;
             if (source is SKBitmap bitmap)
             {
                 sourceSize = new Size(bitmap.Width, bitmap.Height);
@@ -73,9 +73,10 @@ public partial class SKImageView : Control
             {
                 sourceSize = new Size(image.Width, image.Height);
             }
-            else if (source is SKPicture
-                || source is SKDrawable
-                || source is SKSurface)
+            else 
+            //if (source is SKPicture
+            //    || source is SKDrawable
+            //    || source is SKSurface)
             {
                 sourceSize = this.RenderSize;
             }
@@ -91,7 +92,7 @@ public partial class SKImageView : Control
     {
         if (Source is { } source)
         {
-            Size sourceSize = default;
+            Size sourceSize;
             if (source is SKBitmap bitmap)
             {
                 sourceSize = new Size(bitmap.Width, bitmap.Height);
@@ -100,9 +101,10 @@ public partial class SKImageView : Control
             {
                 sourceSize = new Size(image.Width, image.Height);
             }
-            else if (source is SKPicture
-                || source is SKDrawable
-                || source is SKSurface)
+            else 
+            //if (source is SKPicture
+            //    || source is SKDrawable
+            //    || source is SKSurface)
             {
                 sourceSize = this.RenderSize;
             }
@@ -127,9 +129,10 @@ public partial class SKImageView : Control
             {
                 sourceSize = new Size(image.Width, image.Height);
             }
-            else if (source is SKPicture
-                || source is SKDrawable
-                || source is SKSurface)
+            else 
+            //if (source is SKPicture
+            //    || source is SKDrawable
+            //    || source is SKSurface)
             {
                 sourceSize = this.RenderSize;
             }
