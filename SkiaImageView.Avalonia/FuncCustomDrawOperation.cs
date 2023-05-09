@@ -26,7 +26,7 @@ internal class FuncCustomDrawOperation : ICustomDrawOperation
 
     public SKRect SKRect { get; }
 
-    public bool HitTest(Point p) => false;
+    public bool HitTest(Point p) => Bounds.Contains(p);
 
     public bool Equals(ICustomDrawOperation? other)
     {
