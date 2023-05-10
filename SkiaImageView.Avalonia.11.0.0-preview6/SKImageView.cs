@@ -20,7 +20,25 @@ public partial class SKImageView : Control
 {
     public static readonly AvaloniaProperty<SKObject?> SourceProperty =
         AvaloniaProperty.Register<SKImageView, SKObject?>(
-            nameof(Source),null);
+            nameof(Source),null,coerce:(sender,e)=>
+            {
+                if(sender is SKImageView control)
+                {
+                    if (e is SKBitmap bitmap)
+                    {
+                        control.SourceSize = new Size(bitmap.Width, bitmap.Height);
+                    }
+                    else if (e is SKImage image)
+                    {
+                        control.SourceSize = new Size(image.Width, image.Height);
+                    }
+                    else
+                    {
+                        control.SourceSize = control.RenderSize;
+                    }
+                }
+                return e;
+            });
 
     public static readonly AvaloniaProperty<Stretch> StretchProperty =
         AvaloniaProperty.Register<SKImageView, Stretch>(
@@ -48,6 +66,7 @@ public partial class SKImageView : Control
     {
         AffectsRender<SKImageView>(SourceProperty, StretchProperty, StretchDirectionProperty);
         AffectsMeasure<SKImageView>(SourceProperty, StretchProperty, StretchDirectionProperty);
+        AffectsArrange<SKImageView>(SourceProperty, StretchProperty, StretchDirectionProperty);
     }
 
     [Content]
@@ -57,30 +76,15 @@ public partial class SKImageView : Control
         set => this.SetValue(SourceProperty, value);
     }
 
-    private Size RenderSize =>
-        this.Bounds.Size;
+    private Size RenderSize => this.Bounds.Size;
+
+    private Size SourceSize { set; get; }
 
     protected override Size MeasureOverride(Size constraint)
     {
         if (Source is { } source)
         {
-            Size sourceSize;
-            if (source is SKBitmap bitmap)
-            {
-                sourceSize = new Size(bitmap.Width, bitmap.Height);
-            }
-            else if (source is SKImage image)
-            {
-                sourceSize = new Size(image.Width, image.Height);
-            }
-            else 
-            //if (source is SKPicture
-            //    || source is SKDrawable
-            //    || source is SKSurface)
-            {
-                sourceSize = this.RenderSize;
-            }
-            return Stretch.CalculateSize(constraint, sourceSize, StretchDirection);
+            return Stretch.CalculateSize(constraint, SourceSize, StretchDirection);
         }
         else
         {
@@ -92,23 +96,7 @@ public partial class SKImageView : Control
     {
         if (Source is { } source)
         {
-            Size sourceSize;
-            if (source is SKBitmap bitmap)
-            {
-                sourceSize = new Size(bitmap.Width, bitmap.Height);
-            }
-            else if (source is SKImage image)
-            {
-                sourceSize = new Size(image.Width, image.Height);
-            }
-            else 
-            //if (source is SKPicture
-            //    || source is SKDrawable
-            //    || source is SKSurface)
-            {
-                sourceSize = this.RenderSize;
-            }
-            return Stretch.CalculateSize(arrangeSize, sourceSize);
+            return Stretch.CalculateSize(arrangeSize, SourceSize);
         }
         else
         {
@@ -120,25 +108,10 @@ public partial class SKImageView : Control
     {
         if(Source is { } source)
         {
-            Size sourceSize = default;
-            if (source is SKBitmap bitmap)
-            {
-                sourceSize = new Size(bitmap.Width, bitmap.Height);
-            }
-            else if (source is SKImage image)
-            {
-                sourceSize = new Size(image.Width, image.Height);
-            }
-            else 
-            //if (source is SKPicture
-            //    || source is SKDrawable
-            //    || source is SKSurface)
-            {
-                sourceSize = this.RenderSize;
-            }
+            Size sourceSize = SourceSize;
 
-            var viewPort = new Rect(Bounds.Size);
-            var scale = Stretch.CalculateScaling(Bounds.Size, sourceSize, StretchDirection);
+            var viewPort = new Rect(RenderSize);
+            var scale = Stretch.CalculateScaling(RenderSize, sourceSize, StretchDirection);
             var scaledSize = sourceSize * scale;
             var destRect = viewPort
                 .CenterRect(new Rect(scaledSize))
@@ -146,7 +119,8 @@ public partial class SKImageView : Control
             var sourceRect = new Rect(sourceSize)
                 .CenterRect(new Rect(destRect.Size / scale));
 
-            var bounds = SKRect.Create(new SKPoint(), new SKSize { Height = (float)sourceSize.Height, Width = (float)sourceSize.Width });
+            //var bounds = SKRect.Create(new SKPoint(), new SKSize { Height = (float)SKRect.Create(new SKPoint(), new SKSize { Height = (float)sourceSize.Height, Width = (float)sourceSize.Width }).Height, Width = (float)sourceSize.Width });
+            var bounds = SKRect.Create(0f, 0f, (float)sourceSize.Width, (float)sourceSize.Height);
             var scaleMatrix = Matrix.CreateScale(
                 destRect.Width / sourceRect.Width,
                 destRect.Height / sourceRect.Height);
