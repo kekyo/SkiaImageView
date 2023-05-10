@@ -12,37 +12,32 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Metadata;
-using SkiaSharp;
 
 namespace SkiaImageView;
 
-public partial class SKImageView : Control
+partial class SKImageView : Control
 {
-    public static readonly AvaloniaProperty<SKObject?> SourceProperty =
-        AvaloniaProperty.Register<SKImageView, SKObject?>(
-            nameof(Source),null);
+    public static readonly AvaloniaProperty<object?> SourceProperty =
+        Interops.Register<object?, SKImageView>(
+            nameof(Source), null, d => d.OnBitmapChanged());
 
     public static readonly AvaloniaProperty<Stretch> StretchProperty =
-        AvaloniaProperty.Register<SKImageView, Stretch>(
-            nameof(Stretch), Stretch.None);
+        Interops.Register<Stretch, SKImageView>(
+            nameof(Stretch), Stretch.None, d => d.Invalidate(false));
 
     public static readonly AvaloniaProperty<StretchDirection> StretchDirectionProperty =
-        AvaloniaProperty.Register<SKImageView, StretchDirection>(
-            nameof(StretchDirection), StretchDirection.Both);
+        Interops.Register<StretchDirection, SKImageView>(
+            nameof(StretchDirection), StretchDirection.Both, d => d.Invalidate(false));
 
-    public Stretch Stretch
-    {
-        get => (Stretch)this.GetValue(StretchProperty)!;
-        set => this.SetValue(StretchProperty, value);
-    }
+    public static readonly AvaloniaProperty<RenderMode> RenderModeProperty =
+        Interops.Register<RenderMode, SKImageView>(
+            nameof(RenderMode), RenderMode.AsynchronouslyForFetching, d => d.OnBitmapChanged());
 
-    public StretchDirection StretchDirection
-    {
-        get => (StretchDirection)this.GetValue(StretchDirectionProperty)!;
-        set => this.SetValue(StretchDirectionProperty, value);
-    }
-
-    private readonly object _sync = new();
+    public static readonly AvaloniaProperty<ProjectionQuality> ProjectionQualityProperty =
+        Interops.Register<ProjectionQuality, SKImageView>(
+            nameof(ProjectionQuality),
+            ProjectionQuality.Perfect,
+            _ => { });
 
     static SKImageView()
     {
@@ -50,150 +45,44 @@ public partial class SKImageView : Control
         AffectsMeasure<SKImageView>(SourceProperty, StretchProperty, StretchDirectionProperty);
     }
 
-    [Content]
-    public SKObject? Source
+    private void Invalidate(bool both)
     {
-        get => (SKObject?)this.GetValue(SourceProperty);
+        if (both)
+        {
+            base.InvalidateMeasure();
+        }
+        base.InvalidateVisual();
+    }
+
+    [Content]
+    public object? Source
+    {
+        get => this.GetValue(SourceProperty);
         set => this.SetValue(SourceProperty, value);
     }
 
     private Size RenderSize =>
         this.Bounds.Size;
 
-    protected override Size MeasureOverride(Size constraint)
+    private void UpdateWith(BackingStore? backingStore)
     {
-        if (Source is { } source)
-        {
-            Size sourceSize;
-            if (source is SKBitmap bitmap)
-            {
-                sourceSize = new Size(bitmap.Width, bitmap.Height);
-            }
-            else if (source is SKImage image)
-            {
-                sourceSize = new Size(image.Width, image.Height);
-            }
-            else 
-            //if (source is SKPicture
-            //    || source is SKDrawable
-            //    || source is SKSurface)
-            {
-                sourceSize = this.RenderSize;
-            }
-            return Stretch.CalculateSize(constraint, sourceSize, StretchDirection);
-        }
-        else
-        {
-            return default;
-        }
+        this.backingStore = backingStore;
+        this.Invalidate(true);
     }
 
-    protected override Size ArrangeOverride(Size arrangeSize)
-    {
-        if (Source is { } source)
-        {
-            Size sourceSize;
-            if (source is SKBitmap bitmap)
-            {
-                sourceSize = new Size(bitmap.Width, bitmap.Height);
-            }
-            else if (source is SKImage image)
-            {
-                sourceSize = new Size(image.Width, image.Height);
-            }
-            else 
-            //if (source is SKPicture
-            //    || source is SKDrawable
-            //    || source is SKSurface)
-            {
-                sourceSize = this.RenderSize;
-            }
-            return Stretch.CalculateSize(arrangeSize, sourceSize);
-        }
-        else
-        {
-            return default;
-        }
-    }
+    protected override Size MeasureOverride(Size constraint) =>
+        this.InternalMeasureArrangeOverride(constraint);
+
+    protected override Size ArrangeOverride(Size arrangeSize) =>
+        this.InternalMeasureArrangeOverride(arrangeSize);
 
     public override void Render(DrawingContext drawingContext)
     {
-        if(Source is { } source)
+        base.Render(drawingContext);
+
+        if (this.backingStore is { } backingStore)
         {
-            Size sourceSize = default;
-            if (source is SKBitmap bitmap)
-            {
-                sourceSize = new Size(bitmap.Width, bitmap.Height);
-            }
-            else if (source is SKImage image)
-            {
-                sourceSize = new Size(image.Width, image.Height);
-            }
-            else 
-            //if (source is SKPicture
-            //    || source is SKDrawable
-            //    || source is SKSurface)
-            {
-                sourceSize = this.RenderSize;
-            }
-
-            var viewPort = new Rect(Bounds.Size);
-            var scale = Stretch.CalculateScaling(Bounds.Size, sourceSize, StretchDirection);
-            var scaledSize = sourceSize * scale;
-            var destRect = viewPort
-                .CenterRect(new Rect(scaledSize))
-                .Intersect(viewPort);
-            var sourceRect = new Rect(sourceSize)
-                .CenterRect(new Rect(destRect.Size / scale));
-
-            var bounds = SKRect.Create(new SKPoint(), new SKSize { Height = (float)sourceSize.Height, Width = (float)sourceSize.Width });
-            var scaleMatrix = Matrix.CreateScale(
-                destRect.Width / sourceRect.Width,
-                destRect.Height / sourceRect.Height);
-            var translateMatrix = Matrix.CreateTranslation(
-                -sourceRect.X + destRect.X - bounds.Top,
-                -sourceRect.Y + destRect.Y - bounds.Left);
-
-            using (drawingContext.PushClip(destRect))
-            using (drawingContext.PushTransform(translateMatrix * scaleMatrix))
-            {
-                drawingContext.Custom(new FuncCustomDrawOperation(new Rect(bounds.Left, bounds.Top, bounds.Width, bounds.Height), Draw));
-            }
-
-        }
-        else
-        {
-            base.Render(drawingContext);
-        }
-    }
-
-    private void Draw(SKCanvas canvas,SKRect rect)
-    {
-        lock (_sync)
-        {
-            canvas.Save();
-
-            if (Source is SKBitmap bitmap)
-            {
-                canvas.DrawBitmap(bitmap, rect, default);
-            }
-            else if (Source is SKImage image)
-            {
-                canvas.DrawImage(image, rect, default);
-            }
-            else if (Source is SKPicture picture)
-            {
-                canvas.DrawPicture(picture, default);
-            }
-            else if (Source is SKDrawable drawable)
-            {
-                canvas.DrawDrawable(drawable, default);
-            }
-            else if (Source is SKSurface surface)
-            {
-                canvas.DrawSurface(surface, default);
-            }
-            canvas.Restore();
+            backingStore.Draw(drawingContext, this.RenderSize);
         }
     }
 }

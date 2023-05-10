@@ -34,18 +34,31 @@ internal class FuncCustomDrawOperation : ICustomDrawOperation
         return object.ReferenceEquals(this, other);
     }
 
+#if Preview6
+    public void Render(IDrawingContextImpl context)
+    {
+        var leaseFeature = context.GetFeature<ISkiaSharpApiLeaseFeature>();
+        RenderLeaseFeature(leaseFeature);
+    }
+#endif
+#if Preview8
     public void Render(ImmediateDrawingContext context)
     {
         var leaseFeature = context.TryGetFeature<ISkiaSharpApiLeaseFeature>();
-        if (leaseFeature is null)
+        RenderLeaseFeature(leaseFeature);
+    }
+#endif
+
+    private void RenderLeaseFeature(ISkiaSharpApiLeaseFeature? leaseFeature)
+    {
+        if (leaseFeature is { })
         {
-            return;
-        }
-        using var lease = leaseFeature.Lease();
-        var canvas = lease?.SkCanvas;
-        if (canvas is not null)
-        {
-            _draw(canvas, SKRect);
+            using var lease = leaseFeature.Lease();
+            var canvas = lease?.SkCanvas;
+            if (canvas is not null)
+            {
+                _draw(canvas, SKRect);
+            }
         }
     }
 }

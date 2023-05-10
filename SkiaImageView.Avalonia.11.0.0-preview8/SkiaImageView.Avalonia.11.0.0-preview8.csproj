@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net461;netstandard2.0;net6.0</TargetFrameworks>
+        <DefineConstants>$(DefineConstants);AVALONIA;Preview8</DefineConstants>
+        <AssemblyName>SkiaImageView</AssemblyName>
+        <AssemblyTitle>SkiaImageView.Avalonia</AssemblyTitle>
+        <PackageId>SkiaImageView.Avalonia</PackageId>
+        <PackageTags>skiasharp;avalonia;imaging;control</PackageTags>
+        <Version>11.0.0-preview8</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Include="..\SkiaImageView.Avalonia.11.0.0-preview6\FuncCustomDrawOperation.cs" Link="FuncCustomDrawOperation.cs" />
+      <Compile Include="..\SkiaImageView.Avalonia.11.0.0-preview6\SKImageView.cs" Link="SKImageView.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.0.0-preview8" />
+        <PackageReference Include="Avalonia.Skia" Version="11.0.0-preview8" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\Images\SkiaImageView.100.png" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+</Project>

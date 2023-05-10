@@ -1,8 +1,8 @@
 <Application
-    x:Class="SkiaImageView.Sample.App"
     xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="SkiaImageView.Sample.App">
     <Application.Styles>
-        <FluentTheme />
+        <FluentTheme Mode="Light"/>
     </Application.Styles>
 </Application>

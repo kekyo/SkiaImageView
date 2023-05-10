@@ -8,20 +8,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using Epoxy;
 using SkiaSharp;
 
 namespace SkiaImageView.Sample.ViewModels;
 
-public sealed class ItemViewModel : ReactiveObject
+[ViewModel]
+public sealed class ItemViewModel
 {
-    [Reactive]
     public string? Title { get; set; }
 
-    [Reactive]
     public SKBitmap? Image { get; set; }
 
-    [Reactive]
     public int Score { get; set; }
 }
