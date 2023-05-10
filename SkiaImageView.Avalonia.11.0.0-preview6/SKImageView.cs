@@ -157,7 +157,7 @@ public partial class SKImageView : Control
             using (drawingContext.PushClip(destRect))
             using (drawingContext.PushTransform(translateMatrix * scaleMatrix))
             {
-                drawingContext.Custom(new FuncCustomDrawOperation(new Rect(bounds.Left, bounds.Top, bounds.Width, bounds.Height), Draw));
+                drawingContext.Custom(new FuncCustomDrawOperation(bounds, Draw));
             }
 
         }

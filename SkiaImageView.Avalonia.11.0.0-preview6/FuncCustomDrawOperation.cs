@@ -12,11 +12,11 @@ internal class FuncCustomDrawOperation : ICustomDrawOperation
 {
     private readonly Action<SKCanvas, SKRect> _draw;
 
-    public FuncCustomDrawOperation(Rect bounds, Action<SKCanvas, SKRect> draw)
+    public FuncCustomDrawOperation(SKRect skRect, Action<SKCanvas, SKRect> draw)
     {
         _draw = draw;
-        Bounds = bounds;
-        SKRect = new SKRect { Left = (float)Bounds.Left, Right = (float)Bounds.Right, Top = (float)Bounds.Top, Bottom = (float)Bounds.Bottom };
+        Bounds = new Rect(skRect.Left, skRect.Top, skRect.Width, skRect.Height);
+        SKRect = skRect;
     }
 
     public void Dispose()
