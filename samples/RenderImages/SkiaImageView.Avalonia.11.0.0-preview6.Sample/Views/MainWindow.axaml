@@ -1,0 +1,36 @@
+<Window
+    x:Class="SkiaImageView.Avalonia.Sample.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:siv="clr-namespace:SkiaImageView;assembly=SkiaImageView"
+    xmlns:vm="using:SkiaImageView.Avalonia.Sample.ViewModels"
+    Title="SkiaImageView.Avalonia.Sample"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Icon="/Assets/avalonia-logo.ico"
+    mc:Ignorable="d">
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel />
+    </Window.DataContext>
+
+    <Grid RowDefinitions="auto,*">
+        <Button
+            Grid.Row="0"
+            Height="30"
+            Padding="10,5"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Command="{Binding Start}">
+            Start / Stop
+        </Button>
+        <siv:SKImageView
+            Grid.Row="1"
+            Margin="5"
+            Source="{Binding Image}"
+            Stretch="Uniform" />
+    </Grid>
+
+</Window>
