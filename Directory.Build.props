@@ -22,6 +22,7 @@
     <Trademark>SkiaImageView</Trademark>
     <Copyright>Copyright (c) Kouji Matsui</Copyright>
     <Description>Easy way showing SkiaSharp-based image objects onto UI applications.</Description>
+    <IsPackable>false</IsPackable>
 
     <Company>Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)</Company>
     <Authors>Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)</Authors>

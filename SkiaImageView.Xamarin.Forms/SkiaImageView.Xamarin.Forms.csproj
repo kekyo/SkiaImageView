@@ -8,6 +8,7 @@
     <AssemblyTitle>SkiaImageView.Xamarin.Forms</AssemblyTitle>
     <PackageId>SkiaImageView.Xamarin.Forms</PackageId>
     <PackageTags>skiasharp;xamarin-forms;imaging</PackageTags>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

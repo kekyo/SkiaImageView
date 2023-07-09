@@ -7,9 +7,10 @@
 ## NuGet
 
 |Package|NuGet|
-|:--|:--|
+|:----|:----|
 |SkiaImageView.Wpf|[![NuGet SkiaImageView.Wpf](https://img.shields.io/nuget/v/SkiaImageView.Wpf.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Wpf)|
 |SkiaImageView.Xamarin.Forms|[![NuGet SkiaImageView.Xamarin.Forms](https://img.shields.io/nuget/v/SkiaImageView.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Xamarin.Forms)|
+|SkiaImageView.Avalonia11|[![NuGet SkiaImageView.Avalonia11](https://img.shields.io/nuget/v/SkiaImageView.Avalonia11.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Avalonia11)|
 |SkiaImageView.Avalonia|[![NuGet SkiaImageView.Avalonia](https://img.shields.io/nuget/v/SkiaImageView.Avalonia.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Avalonia)|
 |SkiaImageView.Maui|[![NuGet SkiaImageView.Maui](https://img.shields.io/nuget/v/SkiaImageView.Maui.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Maui)|
 
@@ -49,7 +50,8 @@ Fully sample code is here:
 * [WPF Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Wpf.Sample)
 * [Xamarin Forms Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Xamarin.Forms.Sample)
 * [.NET MAUI Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Maui.Sample)
-* [Avalonia Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Avalonia.Sample)
+* [Avalonia 11 Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Avalonia11.Sample)
+* [Avalonia (older) Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Avalonia.Sample)
 
 ----
 
@@ -57,7 +59,7 @@ Fully sample code is here:
 
 ### WPF
 
-* .NET 6.0, 5.0 (`net6.0-windows`, `net5.0-windows`)
+* .NET 7, 6, 5 (`net7.0-windows`, `net6.0-windows`, `net5.0-windows`)
 * .NET Core 3.1, 3.0 (`netcoreapp3.1`, `netcoreapp3.0`)
 * .NET Framework 4.8, 4.6.2 (`net48`, `net462`)
 * SkiaSharp: 2.80.0 or upper.
@@ -70,18 +72,22 @@ Fully sample code is here:
 
 ### .NET MAUI
 
-* .NET 6.0 (`net6.0`)
-* .NET MAUI: 6.0 or upper.
+* .NET 7, 6 (`net7.0`, `net6.0`)
+* .NET MAUI: 6 or upper.
 * SkiaSharp: 2.88.0 or upper. (NOT 2.80.0, because the package contains some invalid type references.)
 
 ### Avalonia
 
-* .NET 6.0, 5.0 (`net6.0-windows`, `net5.0-windows`)
+* .NET 7, 6, 5 (`net7.0`, `net6.0`, `net5.0`)
 * .NET Core 3.1, 3.0, (`netcoreapp3.1`, `netcoreapp3.0`)
 * .NET Core 2.2, 2.1, 2.0 (`netcoreapp2.2`, `netcoreapp2.1`, `netcoreapp2.0`)
 * .NET Framework 4.8, 4.6.2 (`net48`, `net462`)
-* Avalonia: 0.10.0 or upper
-* SkiaSharp: 2.80.0 or upper.
+* Avalonia 11:
+  * Avalonia: 11.0.0 or upper
+  * SkiaSharp: 2.88.3 or upper.
+* Avalonia (older):
+  * Avalonia: 0.10.0 or upper
+  * SkiaSharp: 2.80.0 or upper.
 
 ----
 
@@ -138,6 +144,8 @@ Apache-v2.
 
 ## History
 
+* 1.5.0:
+  * Supported Avalonia 11.
 * 1.4.0:
   * Supported .NET MAUI. (Tested on 6.0.547).
 * 1.3.0:

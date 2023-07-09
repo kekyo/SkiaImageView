@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net462;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net462;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows;net6.0-windows;net7.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <DefineConstants>$(DefineConstants);WPF</DefineConstants>
     <AssemblyName>SkiaImageView</AssemblyName>
     <AssemblyTitle>SkiaImageView.Wpf</AssemblyTitle>
     <PackageId>SkiaImageView.Wpf</PackageId>
     <PackageTags>skiasharp;wpf;imaging;control</PackageTags>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
