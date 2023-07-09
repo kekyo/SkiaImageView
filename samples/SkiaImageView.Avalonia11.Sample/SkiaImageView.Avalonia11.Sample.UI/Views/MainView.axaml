@@ -1,0 +1,64 @@
+<!--
+////////////////////////////////////////////////////////////////////////////
+//
+// SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
+//
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
+//
+// Licensed under Apache-v2: https://opensource.org/licenses/Apache-2.0
+//
+////////////////////////////////////////////////////////////////////////////
+-->
+
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:epoxy="clr-namespace:Epoxy;assembly=Epoxy.Core"
+    xmlns:siv="https://github.com/kekyo/SkiaImageView"
+    xmlns:viewmodels="clr-namespace:SkiaImageView.Sample.ViewModels"
+    xmlns:converters="clr-namespace:SkiaImageView.Sample.Views.Converters"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="SkiaImageView.Sample.Views.MainView"
+    x:DataType="viewmodels:MainViewModel">
+
+    <UserControl.DataContext>
+        <viewmodels:MainViewModel />
+    </UserControl.DataContext>
+
+    <epoxy:EventBinder.Events>
+        <epoxy:Event EventName="Loaded" Command="{Binding Ready}" />
+    </epoxy:EventBinder.Events>
+
+    <DockPanel>
+        <Button DockPanel.Dock="Top"
+                Height="30" Foreground="White" Background="Red"
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                IsEnabled="{Binding IsEnabled}"
+                Command="{Binding Fetch}">Asynchronous fetch the cats from The Cat API!</Button>
+        <Grid>
+            <ListBox ItemsSource="{Binding Items}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="5">
+                            <StackPanel.Resources>
+                                <converters:ScoreToBrushConverter x:Key="ScoreToBrushConverter" />
+                            </StackPanel.Resources>
+
+                            <TextBlock
+                                Text="{Binding Title}"
+                                Background="{Binding Score, Converter={StaticResource ScoreToBrushConverter}}"/>
+                            <siv:SKImageView
+                                Margin="5,3,5,0"
+                                Source="{Binding Image}"
+                                Stretch="Uniform" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </DockPanel>
+</UserControl>

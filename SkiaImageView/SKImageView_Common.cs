@@ -29,7 +29,7 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics;
 #endif
 
-#if AVALONIA
+#if AVALONIA || AVALONIA11
 using Avalonia;
 using Avalonia.Media;
 #endif

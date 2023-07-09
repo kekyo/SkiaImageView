@@ -83,8 +83,9 @@ jobs:
         msbuild -p:Configuration=Release SkiaImageView.Wpf\SkiaImageView.Wpf.csproj
         msbuild -p:Configuration=Release SkiaImageView.Xamarin.Forms\SkiaImageView.Xamarin.Forms.csproj
         msbuild -p:Configuration=Release SkiaImageView.Maui\SkiaImageView.Maui.csproj
+        msbuild -p:Configuration=Release SkiaImageView.Avalonia11\SkiaImageView.Avalonia11.csproj
         msbuild -p:Configuration=Release SkiaImageView.Avalonia\SkiaImageView.Avalonia.csproj
-  
+
     # run: msbuild -p:Configuration=Release -maxCpuCount SkiaImageView.sln
 
     - name: Build NuGet packages
@@ -92,6 +93,7 @@ jobs:
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Wpf\SkiaImageView.Wpf.csproj
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Xamarin.Forms\SkiaImageView.Xamarin.Forms.csproj
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Maui\SkiaImageView.Maui.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Avalonia11\SkiaImageView.Avalonia11.csproj
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts SkiaImageView.Avalonia\SkiaImageView.Avalonia.csproj
 
     #-----------------------------------------------------------------------

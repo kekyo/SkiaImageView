@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <UseMaui>true</UseMaui>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
@@ -9,6 +9,7 @@
     <AssemblyTitle>SkiaImageView.Maui</AssemblyTitle>
     <PackageId>SkiaImageView.Maui</PackageId>
     <PackageTags>skiasharp;maui;imaging</PackageTags>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

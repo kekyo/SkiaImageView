@@ -9,7 +9,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Epoxy;
-using Xamarin.Forms;
+using SkiaSharp;
 
 namespace SkiaImageView.Sample.ViewModels;
 
@@ -18,7 +18,7 @@ public sealed class ItemViewModel
 {
     public string? Title { get; set; }
 
-    public object? Image { get; set; }
+    public SKBitmap? Image { get; set; }
 
     public int Score { get; set; }
 }
