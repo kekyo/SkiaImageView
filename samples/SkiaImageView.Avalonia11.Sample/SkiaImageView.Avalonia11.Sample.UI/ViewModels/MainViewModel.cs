@@ -19,11 +19,11 @@ using System.Threading.Tasks;
 namespace SkiaImageView.Sample.ViewModels;
 
 [ViewModel]
-public sealed class MainWindowViewModel
+public sealed class MainViewModel
 {
-    public MainWindowViewModel()
+    public MainViewModel()
     {
-        // A handler for page appearing
+        // A handler for window opened
         this.Ready = Command.Factory.Create(() =>
         {
             this.IsEnabled = true;

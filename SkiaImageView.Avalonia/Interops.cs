@@ -9,9 +9,8 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Layout;
+using Avalonia.Reactive;
 using Avalonia.Threading;
 using System;
 
@@ -19,6 +18,7 @@ namespace SkiaImageView;
 
 internal static class Interops
 {
+#if AVALONIA
     public static AvaloniaProperty<TTarget> Register<TTarget, THost>(
         string memberName, TTarget defaultValue, Action<THost> changed)
         where THost : IAvaloniaObject =>
@@ -37,6 +37,31 @@ internal static class Interops
     public static Dispatcher GetDispatcher(
         this IAvaloniaObject _) =>
         Dispatcher.UIThread;
+#else
+
+// The same AvaloniaProperty should not be registered twice
+#pragma warning disable AVP1001
+
+    public static AvaloniaProperty<TTarget> Register<TTarget, THost>(
+        string memberName, TTarget defaultValue, Action<THost> changed)
+        where THost : AvaloniaObject
+    {
+        var ap = AvaloniaProperty.Register<THost, TTarget>(
+            memberName, defaultValue, false, BindingMode.OneWay,
+            null,
+            null,
+            false);
+
+        ap.Changed.Subscribe(new AnonymousObserver<AvaloniaPropertyChangedEventArgs<TTarget>>(
+            e => changed((THost)e.Sender)));
+
+        return ap;
+    }
+
+    public static Dispatcher GetDispatcher(
+        this AvaloniaObject _) =>
+        Dispatcher.UIThread;
+#endif
 
     public static void InvokeAsynchronously(
         this Dispatcher dispatcher, Action action, bool isHigherPriority) =>

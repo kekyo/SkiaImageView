@@ -9,26 +9,24 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SkiaImageView.Sample.Models;
 
-public static class Reddit
+public static class TheCatAPI
 {
     private static readonly HttpClient httpClient = new HttpClient();
 
-    public static async ValueTask<RedditPost[]> FetchNewPostsAsync(string name)
+    public static async ValueTask<Cat[]> FetchTheCatsAsync(int cats)
     {
-        // Uses Reddit with Json API
+        // Uses The Cat API (https://thecatapi.com/)
         using (var response =
             await httpClient.
-                GetAsync($"https://www.reddit.com/{name}/new.json").
+                GetAsync($"https://api.thecatapi.com/v1/images/search?limit={cats}").
                 ConfigureAwait(false))
         {
             using (var stream =
@@ -40,13 +38,7 @@ public static class Reddit
 
                 var serializer = new JsonSerializer();
 
-                var root = serializer.Deserialize<JObject>(jr);
-
-                return root!["data"]!["children"]!.
-                    Select(child => child["data"]!).
-                    Where(data => Path.GetExtension(((Uri)data["url"]!).AbsolutePath) switch { ".jpg" => true, ".png" => true, _ => false }).
-                    Select(data => new RedditPost((string)data["title"]!, (Uri)data["url"]!, (int)data["score"]!)).
-                    ToArray();
+                return serializer.Deserialize<Cat[]>(jr)!;
             }
         }
     }
