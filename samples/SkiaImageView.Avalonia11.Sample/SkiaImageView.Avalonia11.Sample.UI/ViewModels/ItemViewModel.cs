@@ -8,20 +8,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using System;
+using Epoxy;
+using SkiaSharp;
 
-namespace SkiaImageView.Sample.Models;
+namespace SkiaImageView.Sample.ViewModels;
 
-public sealed class RedditPost
+[ViewModel]
+public sealed class ItemViewModel
 {
-    public readonly string Title;
-    public readonly Uri Url;
-    public readonly int Score;
+    public string? Title { get; set; }
 
-    public RedditPost(string title, Uri url, int score)
-    {
-        this.Title = title;
-        this.Url = url;
-        this.Score = score;
-    }
+    public SKBitmap? Image { get; set; }
+
+    public int Score { get; set; }
 }

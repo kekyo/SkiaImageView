@@ -1,4 +1,4 @@
-﻿<!--
+<!--
 ////////////////////////////////////////////////////////////////////////////
 //
 // SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
@@ -9,37 +9,38 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 -->
-<Window
-    x:Class="SkiaImageView.Sample.Views.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+
+<UserControl
+    xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:epoxy="https://github.com/kekyo/Epoxy"
+    xmlns:epoxy="clr-namespace:Epoxy;assembly=Epoxy.Core"
     xmlns:siv="https://github.com/kekyo/SkiaImageView"
     xmlns:viewmodels="clr-namespace:SkiaImageView.Sample.ViewModels"
     xmlns:converters="clr-namespace:SkiaImageView.Sample.Views.Converters"
-    mc:Ignorable="d"
-    Title="SkiaImageView.Sample" Height="450" Width="800">
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="SkiaImageView.Sample.Views.MainView"
+    x:DataType="viewmodels:MainViewModel">
 
-    <Window.DataContext>
-        <viewmodels:MainWindowViewModel />
-    </Window.DataContext>
+    <UserControl.DataContext>
+        <viewmodels:MainViewModel />
+    </UserControl.DataContext>
 
     <epoxy:EventBinder.Events>
         <epoxy:Event EventName="Loaded" Command="{Binding Ready}" />
     </epoxy:EventBinder.Events>
-   
+
     <DockPanel>
         <Button DockPanel.Dock="Top"
                 Height="30" Foreground="White" Background="Red"
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                 IsEnabled="{Binding IsEnabled}"
                 Command="{Binding Fetch}">Asynchronous fetch the cats from The Cat API!</Button>
         <Grid>
             <ListBox ItemsSource="{Binding Items}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 ScrollViewer.CanContentScroll="False">
+                 ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="5">
@@ -60,4 +61,4 @@
             </ListBox>
         </Grid>
     </DockPanel>
-</Window>
+</UserControl>

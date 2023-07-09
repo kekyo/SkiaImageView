@@ -9,15 +9,12 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Epoxy;
-using Epoxy.Synchronized;
 using SkiaImageView.Sample.Models;
 using SkiaSharp;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
-
-// Conflicted between Xamarin.Forms.Command and Epoxy.Command.
-using Command = Epoxy.Command;
 
 namespace SkiaImageView.Sample.ViewModels;
 
@@ -26,52 +23,56 @@ public sealed class MainContentPageViewModel
 {
     public MainContentPageViewModel()
     {
-        this.Items = new ObservableCollection<ItemViewModel>();
-
         // A handler for page appearing
-        this.Ready = Command.Factory.CreateSync(() =>
+        this.Ready = Command.Factory.Create(() =>
         {
             this.IsEnabled = true;
+            return default;
         });
 
         // A handler for fetch button
-        this.Fetch = CommandFactory.Create(async () =>
+        this.Fetch = Command.Factory.Create(async () =>
         {
+            // Disable button
             this.IsEnabled = false;
 
             try
             {
-                // Uses Reddit API
-                var reddits = await Reddit.FetchNewPostsAsync("r/aww");
+                // Uses The Cat API
+                var cats = await TheCatAPI.FetchTheCatsAsync(10);
 
                 this.Items.Clear();
 
                 static async ValueTask<SKBitmap?> FetchImageAsync(Uri url) =>
-                    SKBitmap.Decode(await Reddit.FetchImageAsync(url));
+                    SKBitmap.Decode(await TheCatAPI.FetchImageAsync(url));
 
-                foreach (var reddit in reddits)
+                foreach (var cat in cats)
                 {
-                    this.Items.Add(new ItemViewModel
+                    if (cat.Url is { } url)
                     {
-                        Title = reddit.Title,
-                        Score = reddit.Score,
-                        Image = await FetchImageAsync(reddit.Url),
-                        //Image = reddit.Url,
-                    });
+                        var bleed = cat?.Bleeds.FirstOrDefault();
+                        this.Items.Add(new ItemViewModel
+                        {
+                            Title = bleed?.Description ?? bleed?.Temperament ?? "(No comment)",
+                            Score = bleed?.Intelligence ?? 5,
+                            Image = await FetchImageAsync(url)
+                        });
+                    }
                 }
             }
             finally
             {
-                IsEnabled = true;
+                // Re-enable button
+                this.IsEnabled = true;
             }
         });
     }
 
-    public Command? Ready { get; private set; }
+    public Command Ready { get; }
 
     public bool IsEnabled { get; private set; }
 
-    public ObservableCollection<ItemViewModel>? Items { get; private set; }
+    public ObservableCollection<ItemViewModel> Items { get; } = new();
 
-    public Epoxy.Command? Fetch { get; private set; }
+    public Command Fetch { get; }
 }

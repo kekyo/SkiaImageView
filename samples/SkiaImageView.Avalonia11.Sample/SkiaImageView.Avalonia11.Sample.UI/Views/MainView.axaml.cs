@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 //
 // SkiaImageView - Easy way showing SkiaSharp-based image objects onto UI applications.
 //
@@ -8,17 +8,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Epoxy;
-using SkiaSharp;
+using Avalonia.Controls;
 
-namespace SkiaImageView.Sample.ViewModels;
+namespace SkiaImageView.Sample.Views;
 
-[ViewModel]
-public sealed class ItemViewModel
+public sealed partial class MainView : UserControl
 {
-    public string? Title { get; set; }
-
-    public SKBitmap? Image { get; set; }
-
-    public int Score { get; set; }
+    public MainView() =>
+        InitializeComponent();
 }
