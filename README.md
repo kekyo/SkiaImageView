@@ -9,12 +9,14 @@
 |Package|NuGet|
 |:----|:----|
 |SkiaImageView.Wpf|[![NuGet SkiaImageView.Wpf](https://img.shields.io/nuget/v/SkiaImageView.Wpf.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Wpf)|
-|SkiaImageView.Xamarin.Forms|[![NuGet SkiaImageView.Xamarin.Forms](https://img.shields.io/nuget/v/SkiaImageView.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Xamarin.Forms)|
 |SkiaImageView.Avalonia11|[![NuGet SkiaImageView.Avalonia11](https://img.shields.io/nuget/v/SkiaImageView.Avalonia11.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Avalonia11)|
 |SkiaImageView.Avalonia|[![NuGet SkiaImageView.Avalonia](https://img.shields.io/nuget/v/SkiaImageView.Avalonia.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Avalonia)|
+|SkiaImageView.Xamarin.Forms|[![NuGet SkiaImageView.Xamarin.Forms](https://img.shields.io/nuget/v/SkiaImageView.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Xamarin.Forms)|
 |SkiaImageView.Maui|[![NuGet SkiaImageView.Maui](https://img.shields.io/nuget/v/SkiaImageView.Maui.svg?style=flat)](https://www.nuget.org/packages/SkiaImageView.Maui)|
 
 ----
+
+[![Japanese language](Images/Japanese.256.png)](https://github.com/kekyo/SkiaImageView/blob/master/README.ja.md)
 
 ## What is this?
 
@@ -48,10 +50,12 @@ public sealed class ViewModel
 Fully sample code is here:
 
 * [WPF Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Wpf.Sample)
-* [Xamarin Forms Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Xamarin.Forms.Sample)
-* [.NET MAUI Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Maui.Sample)
 * [Avalonia 11 Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Avalonia11.Sample)
 * [Avalonia (older) Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Avalonia.Sample)
+* [Xamarin Forms Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Xamarin.Forms.Sample)
+* [.NET MAUI Sample](https://github.com/kekyo/SkiaImageView/tree/main/samples/SkiaImageView.Maui.Sample)
+
+Regardless of which platform you use, the usage is almost identical.
 
 ----
 
@@ -63,18 +67,6 @@ Fully sample code is here:
 * .NET Core 3.1, 3.0 (`netcoreapp3.1`, `netcoreapp3.0`)
 * .NET Framework 4.8, 4.6.2 (`net48`, `net462`)
 * SkiaSharp: 2.80.0 or upper.
-
-### Xamarin Forms
-
-* .NET Standard 2.0 (`netstandard2.0`)
-* Xamarin Forms: 5.0.0.1874 or upper
-* SkiaSharp: 2.80.0 or upper.
-
-### .NET MAUI
-
-* .NET 7, 6 (`net7.0`, `net6.0`)
-* .NET MAUI: 6 or upper.
-* SkiaSharp: 2.88.0 or upper. (NOT 2.80.0, because the package contains some invalid type references.)
 
 ### Avalonia
 
@@ -88,6 +80,18 @@ Fully sample code is here:
 * Avalonia (older):
   * Avalonia: 0.10.0 or upper
   * SkiaSharp: 2.80.0 or upper.
+
+### Xamarin Forms
+
+* .NET Standard 2.0 (`netstandard2.0`)
+* Xamarin Forms: 5.0.0.1874 or upper
+* SkiaSharp: 2.80.0 or upper.
+
+### .NET MAUI
+
+* .NET 7, 6 (`net7.0`, `net6.0`)
+* .NET MAUI: 6 or upper.
+* SkiaSharp: 2.88.0 or upper. (NOT 2.80.0, because the package contains some invalid type references.)
 
 ----
 
