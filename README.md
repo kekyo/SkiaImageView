@@ -18,7 +18,7 @@
 
 ## What is this?
 
-Easy way showing [SkiaSharp](https://github.com/mono/SkiaSharp)-based image objects onto UI applications.
+A control for easy way showing [SkiaSharp](https://github.com/mono/SkiaSharp)-based image objects onto UI applications.
 You can simply bind a SkiaSharp image object to `Source` property.
 
 `SKImageView` is a control of SkiaSharp image drawing.
